@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="build-lnx-TC">
+    <property name="link.prefix" value=""/>
+    
+    <condition property="extn" value="so">
+        <equals arg1="shared" arg2="${link.type}"/>
+    </condition>
+    
+    <condition property="extn" value="">
+        <equals arg1="executable" arg2="${link.type}"/>
+    </condition>
+
+    <condition property="index" value="2">
+        <equals arg1="shared" arg2="${link.type}"/>
+    </condition>
+
+    <condition property="index" value="1">
+        <equals arg1="executable" arg2="${link.type}"/>
+    </condition>    
+    
+    <target name="init">
+         <tstamp/>
+    </target>
+
+    <macrodef name="compile">
+        <attribute name="srcfiles" default="" />
+        <attribute name="includes" default="" />
+        <sequential>
+            <mkdir dir="${obj.dir}"/>
+            <cc name="g++" objdir="${obj.dir}">
+                <compilerarg value="-c" />
+                <compilerarg value="-fPIC" />
+                <compilerarg value="-m64"/>
+                <compilerarg value="-DPOSIX" />
+                <compilerarg value="-DIPLIB=none" />
+                <compilerarg value="-Wno-deprecated" />
+                <includepath path="${TC_INCLUDE}" />
+                <includepath path="${TC_INCLUDE}/ge" />
+                <includepath path="${TC_ROOT}/include_cpp" />
+                <includepath path="${BOOST_HOME}" />
+                <includepath path="${PROJECT_ROOT}" />
+                <!-- <includepath path="${GE_TC_LOCAL_DEPLOY_ROOT}/include/GE_TC_Foundation" /> 				            	 				
+                <includepath path="${GE_TC_LOCAL_DEPLOY_ROOT}/include/GE_TC_Foundation/ge_common" /> 
+                <includepath path="${GE_TC_LOCAL_DEPLOY_ROOT}/include/GE_TC_Foundation/ge_sysapi" />
+                <includepath path="${GE_TC_LOCAL_DEPLOY_ROOT}/include/GE_TC_Foundation/ge_tc_common" />	 -->
+
+
+                <!-- Conan include paths -->
+                <includepath path="${env.TC_FOUNDATION_INCLUDE}" />
+
+                <includepath>				
+                    <path refid="@{includes}"/>
+                </includepath>
+
+                <!-- Source files are provided from the calling modules -->
+                <fileset refid="@{srcfiles}"/>
+           </cc>    
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="link">
+        <attribute name="linktype" default="" />
+        <attribute name="outfile" default="" />
+        <attribute name="objs" default="" />
+        <attribute name="linkwith" default="" />
+        
+        <sequential>
+            <mkdir dir="${link.dir}"/>
+            <cc name="g++" link="@{linktype}" outfile="@{outfile}" >
+            
+                <libset dir="${env.TC_FOUNDATION_LIB}" libs="ge_bom, ge_bop, ge_cm, ge_epm, ge_itkpp, ge_pie, ge_common, ge_sysapi, ge_tc_kafka"/>
+                    
+                <libset dir="${PROJECT_ROOT}/lib" libs="${link.depend.libs}"/>
+                <libset dir="${PROJECT_ROOT}/lib" libs="${link.depend.test.libs}" if="cpptest"/>
+                <libset dir="${env.TC_FOUNDATION_LIB}"/>
+
+                <fileset refid="@{objs}"/>
+
+            </cc>
+        </sequential>
+    </macrodef>    
+    
+    <macrodef name="link_exe">
+        <attribute name="linktype" default="" />
+        <attribute name="outfile" default="" />
+        <attribute name="objs" default="" />
+        <attribute name="linkwith" default="" />
+        
+        <sequential>
+            <mkdir dir="${link.dir}"/>
+            <cc name="g++" link="@{linktype}" outfile="@{outfile}" >
+                <syslibset libs="m,nsl,resolv,pthread,stdc++"/>
+                <libset dir="${env.TC_FOUNDATION_LIB}" libs="ge_bom, ge_bop, ge_cm, ge_epm, ge_itkpp, ge_pie, ge_common, ge_sysapi, ge_tc_kafka"/>
+                <libset dir="${PROJECT_ROOT}/lib" libs="${link.depend.libs}"/>
+                <libset dir="${PROJECT_ROOT}/lib" libs="${link.depend.test.libs}" if="cpptest"/>
+                <libset dir="${TC_ROOT}/lib" libs="ae,
+                                                   aie,
+                                                   backup,
+                                                   base_utils,
+                                                   bom,
+                                                   cfm,
+                                                   collabctx,
+                                                   cxpom,
+                                                   dmi,
+                                                   ecm,
+                                                   eint,
+                                                   epm,
+                                                   fclasses,
+                                                   form,
+                                                   grm,
+                                                   ics,
+                                                   ict,
+                                                   internal_exits,
+                                                   itk,
+                                                   lov,
+                                                   me,
+                                                   mechatronics,
+                                                   mgc,
+                                                   objio,
+                                                   pie,
+                                                   pom,
+                                                   property,
+                                                   ps,
+                                                   publication,
+                                                   qry,
+                                                   res,
+                                                   rdv,
+                                                   sa,
+                                                   sml,
+                                                   ss,
+                                                   tcsso,
+                                                   sub_mgr,
+                                                   syss,
+                                                   tc,
+                                                   tccore,
+                                                   tccoreext,
+                                                   tcinit,
+                                                   tcsso,
+                                                   textsrv,
+                                                   user_exits,
+                                                   icui18n671_X_19,
+                                                   xerces322_X_19,
+                                                   xalan111_X_19,
+                                                   mld,
+                                                   metaframework,
+                                                   qsearch,
+                                                   tie,
+                                                   trv,
+                                                   gms,
+                                                   nxmgr_im,
+                                                   bmf,
+                                                   validation,
+                                                   req,
+                                                   extensionframework,
+                                                   constants,
+                                                   ugmath,
+                                                   plmxmlSDK,
+                                                   poco,
+                                                   appr,
+                                                   config,
+                                                   tctrushape,
+                                                   ove,
+                                                   ai,
+                                                   usage,
+                                                   bob,
+                                                   fnd0booleansolve,
+                                                   booleanmath,
+                                                   mfgbvr,
+                                                  tc_utils,
+                                                   vis,
+                                                   eintstub,
+                                                   sharedcachetypes,
+                                                   schmgt_bridge,
+                                                   wproxy,
+                                                   tcgsoap,
+                                                   schmgt,
+                                                   tcsoaworkflownative,
+                                                   tcsoacommon,
+                                                   tcsoaserver,
+                                                   Fnd0audit_mgr,
+                                                   foundationbase,
+                                                   Fnd0Participant,
+                                                   ACE,
+                                                   TcCrypto,
+                                                   archive,
+                                                   docmgt,
+                                                   cae,
+                                                   vispublish,
+                                                   internal_server_exits,
+                                                   server_exits,
+                                                   visualization,
+                                                   dispatcher,
+                                                   tms,
+                                                   rbf,
+                                                   nls,
+                                                   tcsan,
+                                                   TcCryptoUtil,
+                                                   constraintsolver,
+                                                   functionality,
+                                                   tcsoaaistrongmngd,
+                                                   tcsoaclientmngd,
+                                                   saservices,
+                                                   tcsoacorenative,
+                                                   foundationdispatch,
+                                                   sharedcache,
+                                                   tccurl"/>
+
+                <fileset refid="@{objs}"/>
+            </cc>
+        </sequential>
+    </macrodef> 
+
+    <target name="compile" depends="init">
+        <echo message="Compiling ${ant.project.name}"/>
+        <compile srcfiles="source" includes="include.path"/>
+    </target>
+
+    <target name="link" depends="compile">
+        <mkdir dir="${PROJECT_ROOT}/lib" />
+
+        <echo message="Building ${ant.project.name}"/>
+        
+        <fileset id="objfiles" dir="${obj.dir}">
+            <include name="*.o"/>
+            <exclude name="TEST*.o"/>
+        </fileset>
+        
+        <link linktype="${link.type}" outfile="${link.dir}/${link.prefix}${link.name}" objs="objfiles" linkwith="" />
+
+        <!-- Now copy the lib files to dist/lib -->
+        <copy todir="${PROJECT_ROOT}/lib" flatten="true" verbose="true">
+            <fileset dir="${link.dir}">
+                <include name="*.so" />
+                <exclude name="TEST*" />
+            </fileset>
+        </copy>       
+    </target>
+    
+    <target name="install" depends="dist"/>
+
+    <target name="dist" depends="link"/>
+    
+    <target name="build_exe" depends="">
+        <basename property="program" file="${file}" suffix=".cxx"/>
+        
+        <fileset id="src_file"  dir=".">
+            <include name="${program}.cxx" /> 
+        </fileset>        
+        
+        <fileset id="obj_file"  dir="obj">
+            <include name="${program}.o" />
+        </fileset>
+        
+        <echo message="Compiling ${file}"/>
+        <compile srcfiles="src_file" includes="include.path"/>
+        
+        <condition property="cpptest">
+               <contains substring="TEST_" string="${program}"/>
+          </condition>
+        
+        <link_exe linktype="executable" outfile="${link.dir}/${program}" objs="obj_file" linkwith="${link.depend}"/>
+
+    </target>
+</project>

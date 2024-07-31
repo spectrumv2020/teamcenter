@@ -1,116 +1,40 @@
-https://support.sw.siemens.com/en-US/product/282219420/knowledge-base/PL8582568
-Sample Teamcenter C program : test itk init module
+# DataExtractor 
+This repo is for Data Extractor project
 
-/*HEAD TEST_ITK_INIT_MODULE CCC ITK */
-#include <stdlib.h>
-#include <tc/tc.h>
-#include <sa/tcfile.h>
-#include <tccore/workspaceobject.h>
-#include <ae/ae.h>
-#include <user_exits/user_exits.h>
-#include <ss/ss_const.h>
-#include <tccore/item.h>
-#include <pom/pom/pom.h>
-#include <ae/dataset.h>
-#include <sa/sa.h>
-#include <stdarg.h>
+# Build Mechanism 
 
-static void ECHO(char *format, ...)
-{
-    char msg[1000];
-    va_list args;
-    va_start(args, format);
-    vsprintf(msg, format, args);
-    va_end(args);
-    printf(msg);
-    TC_write_syslog(msg);
-}
+## Pre-requisites
+1. Apach-ant (Will be provided with this package if needed)
 
-#define IFERR_ABORT(X)  (report_error( __FILE__, __LINE__, #X, X, TRUE))
-#define IFERR_REPORT(X) (report_error( __FILE__, __LINE__, #X, X, FALSE))
+## Build Process
+This project uses apache-ant to build and create libraries and executables
+To build on Windows
+1. Change directory to scripts under DataExtractor
+2. Update environment variables in build_env.bat and save
+3. Launch a command shell 
+4. source environment 
+5. run "ant clean" and "ant" - This generates all binaries required
+6. run "ant deploy" - This copies all required binaries to DEPLOY_ROOT/bin directory
 
-static int report_error(char *file, int line, char *call, int status,
-    logical exit_on_error)
-{
-    if (status != ITK_ok)
-    {
-        int
-            n_errors = 0,
-            *severities = NULL,
-            *statuses = NULL;
-        char
-            **messages;
+## Package Process
+1. Zip all the files in DEPLOY_ROOT/bin
+2. Copy on to server/host where the DataExtractor program need to be executed
 
-        EMH_ask_errors(&n_errors, &severities, &statuses, &messages);
-        if (n_errors > 0)
-        {
-            ECHO("\n%s\n", messages[n_errors-1]);
-            EMH_clear_errors();
-        }
-        else
-        {
-            char *error_message_string;
-            EMH_get_error_string (NULLTAG, status, &error_message_string);
-            ECHO("\n%s\n", error_message_string);
-        }
+## Deploy
+1. It is optional to copy these binaries into TC_ROOT/bin - But, not necessary
 
-        ECHO("error %d at line %d in %s\n", status, line, file);
-        ECHO("%s\n", call);
+# Running the program
+## Pre-Requisites
+1. Teamcenter 2-Tier environment (Command Shell)
 
-        if (exit_on_error)
-        {
-            ECHO("%s", "Exiting program!\n");
-            exit (status);
-        }
-    }
+## Extracting MCAD Data
+1. Launch a Teamcenter shell
+2. Change directory to where the package is extracted
+3. Run command - ItemIdExtractor -u=<userid> -p=<password> -g=<group> -item_type=<Item Type> -outfile=<output file name>
+   Example: ItemIdExtractor -u=a490900 -p=a490900 -g=dba -item_type=TR4_PN -outfile=output.txt
+4. The output from previous command may contain large number of items for a given type. Split item ids into smaller files
+   and provide each file as input to next command(MCADDataExtractor)
+5. Run command - MCADDataExtractor -u=<userid> -p=<password> -g=<group> -infile=<Input file name> -dataset_types=<types of datasets to extract files for> -outfile=<output file name>
+   Example: MCADDataExtractor -u=a490900 -p=a490900 -g=dba -infile=PN1.txt -dataset_types=ProPrt,ProAsm,ProDrw -outfile=PN1_MCAD.txt
+   (Note: Dataset attached to Items will not extracted)
 
-    return status;
-}
-
-static void do_it(void)
-{
-    char
-        *user_name_string = NULL,
-        groupname[SA_name_size_c + 1] = "";
-    tag_t
-        user_tag = NULLTAG,
-        group_tag = NULLTAG;
-
-    IFERR_ABORT(SA_init_module());
-    IFERR_REPORT(POM_get_user(&user_name_string, &user_tag));
-    IFERR_REPORT(SA_ask_user_login_group(user_tag, &group_tag));
-    IFERR_REPORT(SA_ask_group_name(group_tag, groupname));
-    ECHO("Successfully logged in as %s - %s\n", user_name_string, groupname);
-    if (user_name_string != NULL) MEM_free(user_name_string);
-    IFERR_REPORT(SA_exit_module());
-}
-
-int ITK_user_main(int argc, char* argv[])
-{
-    char
-        *users_id, *users_password, *users_group;
-
-    IFERR_REPORT(ITK_initialize_text_services(ITK_BATCH_TEXT_MODE));
-
-/*  Begin ITK_auto_login the long way */
-
-    users_id = ITK_ask_cli_argument("-u=");
-    users_password = ITK_ask_cli_argument("-p=");
-    users_group = ITK_ask_cli_argument("-g=");
-
-    ECHO("Calling ITK_init_module(%s, %s, %s)...\n", users_id, users_password,
-        users_group);
-    IFERR_REPORT(ITK_init_module(users_id, users_password, users_group));
-
-/*  End ITK_auto_login the long way */
-
-    ECHO("Done\n");
-
-    IFERR_REPORT(ITK_set_journalling(TRUE));
-
-    do_it();
-
-    IFERR_REPORT(ITK_exit_module(FALSE));
-
-    return ITK_ok;
-}

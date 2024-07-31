@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="DataExtraction" default="install">
+    <import file="build-common.xml"/>
+
+    <target name="default" depends="install"/>
+    
+    <target name="install" depends="dist">
+    </target>
+
+    <target name="clean" depends="">
+        <delete dir="${PROJECT_ROOT}/lib"/>
+        <antcall target="depend.all">
+            <param name="dependency.target" value="clean"/>
+        </antcall>
+    </target>
+
+    <target name="compile">
+        <antcall target="depend.all">
+            <param name="dependency.target" value="compile"/>
+        </antcall>
+    </target>
+
+    <target name="dist" depends="">
+        <antcall target="depend.all">
+            <param name="dependency.target" value="dist"/>
+        </antcall>
+    </target>
+    
+    <target name="deploy" depends="">
+        <antcall target="depend.all">
+            <param name="dependency.target" value="deploy"/>
+        </antcall>
+    </target>
+    
+</project>
