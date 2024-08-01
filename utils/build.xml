@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="utils" default="install">
+	<property name="srcfile" value="*.cxx"/>
+	<!--property name="link.depend" value="itk_main.obj"/-->
+	
+	<property name="link.name" value="${ant.project.name}"/>
+	<property name="link.depend" value=""/>
+	
+	<property name="obj.dir" value="obj"/>
+	<property name="link.dir" value="bin"/>
+
+	<import file="../build-common.xml"/>	
+
+	<path id="include.path">
+        <pathelement path="${PROJECT_ROOT}"/>
+		<pathelement path="${PROJECT_ROOT}/common"/>
+	</path>
+	
+	<fileset id="source" dir=".">
+		<include name="${srcfile}"/>
+	</fileset>
+	
+	<target name="clean">
+        <echo message="Cleaning up ${ant.project.name}"/>
+        <delete dir="${obj.dir}"/>
+        <delete dir="${link.dir}"/>
+        <delete dir="bin"/>
+    </target>
+
+	<target name="dist">
+		<foreach target="build_exe" param="file" >
+			<path>
+		    	<fileset refid="source"/>
+		    </path>
+		</foreach>
+	</target>
+
+	<target name="deploy" description="deploy the binaries">
+		<sequential>
+			<!--  -->
+			<echo message="" />
+			<echo message="---------------------------------" />
+			<echo message="Deploy custom executable" />
+			<echo message="---------------------------------" />
+			<copy todir="${DEPLOY_ROOT}/bin" verbose="true" failonerror="false">
+				<fileset dir="${link.dir}">
+					<include name="*.exe" />
+				</fileset>
+			</copy>
+			
+		</sequential>
+	</target>
+
+	<property name="link.depend.libs" value="${link.prefix}tr_migration_common"/>
+</project>

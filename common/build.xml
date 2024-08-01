@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="tr_migration_common" default="install">
+	
+	<property name="link.type" value="shared"/>
+	<property name="link.name" value="${ant.project.name}"/>
+	<property name="link.depend" value="itk_main.obj"/>
+		
+	<property name="obj.dir" value="obj"/>
+	<property name="link.dir" value="lib"/>
+	
+	<fileset id="source" dir=".">
+		<include name="*.cxx" />
+	</fileset>
+	
+	<import file="../build-common.xml"/>
+
+	<path id="include.path">
+	    <pathelement path="."/>
+	</path>
+
+    <target name="clean">
+        <echo message="Cleaning up ${ant.project.name}"/>
+        <delete dir="${obj.dir}"/>
+        <delete dir="${link.dir}"/>
+        <delete dir="bin"/>
+    </target>
+
+	<target name="deploy" depends="" description="Deploy">
+		<sequential>
+		<!--  -->
+			<echo message="Deploy Common Libraries" />
+			<copy todir="${DEPLOY_ROOT}/bin" verbose="true" failonerror="false">
+			<fileset dir="${link.dir}">
+				<include name="*.dll" />
+				<include name="*.pdb" />
+			</fileset>
+			</copy>
+
+			<copy todir="${DEPLOY_ROOT}/lib" verbose="true" failonerror="false">
+				<fileset dir="${link.dir}">
+					<include name="*.lib" />
+					<include name="*.so" />
+				</fileset>
+			</copy>
+
+			<copy todir="${DEPLOY_ROOT}/include/${PROJECT_NAME}/${ant.project.name}" verbose="true" failonerror="false">
+				<fileset dir=".">
+					<include name="*.h" />
+				</fileset>
+			</copy>
+		</sequential>
+	</target>	
+	<property name="link.depend.libs" value=""/>
+	<property name="export.lib" value="_BUILD_common"/>
+	
+</project>

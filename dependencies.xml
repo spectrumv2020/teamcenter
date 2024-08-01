@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="dependencies" default="depend.all">
+	<dirname property="dependencies.basedir" file="${ant.file.dependencies}" />
+	<!-- Below parameter can be passed from command line 
+         ant depend.gepc_base -Ddependency.target=compile -->
+	<property name="dependency.target" value="dist" />
+
+	<!-- Help -->
+	<target name="help">
+		<echo message="Please select a target:" />
+		<echo message="" />
+		<echo message="all - Builds all libraries and utilities" />
+	</target>
+
+	<target name="depend.all" depends="depend.utils" />
+	
+	<target name="depend.utils" depends="depend.common">
+		<ant dir="${dependencies.basedir}/utils" inheritAll="false" target="${dependency.target}" />
+	</target>
+	
+	<target name="depend.common" depends="">
+		<ant dir="${dependencies.basedir}/common" inheritAll="false" target="${dependency.target}" />
+	</target>
+</project>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="cl/MP /c /nologo /EHsc /W1 /Ox /Oy- /Zi /Zc:wchar_t- /MD /TP /MP /INCREMENTAL /DEBUG:FASTLINK -DNT40 -DPOMDLL -DCRTAPI1=_cdecl -DCRTAPI2=cdecl -D_WIN32 -DWIN32 -DWIN32_LEAN_AND_MEAN -DWNT -DBYPASS_FLEX -D_WIN64 -D_INTEL=1 -DIPLIB=none -D${export.lib} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE /c /nologo /DNDEBUG /MD /I..\..\TC\include /I..\..\TC\include_cpp /I..\.. /I..\.. /I..\..\DataExtractor\common">
+      <target file="ECADDataExtractor.obj" lastModified="1908e125493">
+         <source file="..\ECADDataExtractor.cxx" lastModified="1908e0c2fb1"/>
+      </target>
+      <target file="StandaloneDocumentExtractor.obj" lastModified="1908e127fc2">
+         <source file="..\StandaloneDocumentExtractor.cxx" lastModified="1908e0d11d2"/>
+      </target>
+      <target file="MCADDataExtractor.obj" lastModified="1908e1276ed">
+         <source file="..\MCADDataExtractor.cxx" lastModified="1908e0cecb8"/>
+      </target>
+      <target file="ItemIdExtractor.obj" lastModified="1908e126c39">
+         <source file="..\ItemIdExtractor.cxx" lastModified="1908e0cc78d"/>
+      </target>
+      <target file="DCNDataExtractor.obj" lastModified="1908e1249f5">
+         <source file="..\DCNDataExtractor.cxx" lastModified="1908e0bfe90"/>
+      </target>
+      <target file="FolderStructureExtractor.obj" lastModified="1908e125b59">
+         <source file="..\FolderStructureExtractor.cxx" lastModified="1908e0c7050"/>
+      </target>
+      <target file="GeneralDocumentExtractor.obj" lastModified="1908e126629">
+         <source file="..\GeneralDocumentExtractor.cxx" lastModified="1908e0c9dea"/>
+      </target>
+   </processor>
+</history>

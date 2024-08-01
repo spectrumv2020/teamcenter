@@ -1,0 +1,70 @@
+/debug
+/nodefaultlib
+/nologo
+/machine:x64
+/subsystem:console
+-libpath:C:\Code\TC/lib
+/NOLOGO
+/DLL
+/INCREMENTAL:NO
+/OUT:libtr_migration_common.dll
+"..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\um\x64\WinMM.Lib"
+"..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\um\x64\AdvAPI32.Lib"
+"..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\um\x64\kernel32.Lib"
+"..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64\vcruntime.lib"
+"..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\ucrt\x64\ucrt.lib"
+"..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64\msvcprt.lib"
+"..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.17763.0\um\x64\WSock32.Lib"
+"..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64\msvcrt.lib"
+"..\..\..\..\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64\oldnames.lib"
+..\..\..\TC\lib\libae.lib
+..\..\..\TC\lib\libaie.lib
+..\..\..\TC\lib\libappr.lib
+..\..\..\TC\lib\libarchive.lib
+..\..\..\TC\lib\libbackup.lib
+..\..\..\TC\lib\libbase_utils.lib
+..\..\..\TC\lib\libbom.lib
+..\..\..\TC\lib\libcfm.lib
+..\..\..\TC\lib\libcollabctx.lib
+..\..\..\TC\lib\libcxpom.lib
+..\..\..\TC\lib\libdmi.lib
+..\..\..\TC\lib\libecm.lib
+..\..\..\TC\lib\libeint.lib
+..\..\..\TC\lib\libepm.lib
+..\..\..\TC\lib\libfclasses.lib
+..\..\..\TC\lib\libform.lib
+..\..\..\TC\lib\libgrm.lib
+..\..\..\TC\lib\libics.lib
+..\..\..\TC\lib\libict.lib
+..\..\..\TC\lib\libinternal_exits.lib
+..\..\..\TC\lib\libitk.lib
+..\..\..\TC\lib\liblov.lib
+..\..\..\TC\lib\libme.lib
+..\..\..\TC\lib\libmechatronics.lib
+..\..\..\TC\lib\libmgc.lib
+..\..\..\TC\lib\libmld.lib
+..\..\..\TC\lib\libobjio.lib
+..\..\..\TC\lib\libpie.lib
+..\..\..\TC\lib\libpom.lib
+..\..\..\TC\lib\libproperty.lib
+..\..\..\TC\lib\libps.lib
+..\..\..\TC\lib\libpublication.lib
+..\..\..\TC\lib\libqry.lib
+..\..\..\TC\lib\librdv.lib
+..\..\..\TC\lib\libres.lib
+..\..\..\TC\lib\libsa.lib
+..\..\..\TC\lib\libsml.lib
+..\..\..\TC\lib\libss.lib
+..\..\..\TC\lib\libstep.lib
+..\..\..\TC\lib\libsub_mgr.lib
+..\..\..\TC\lib\libsyss.lib
+..\..\..\TC\lib\libtc.lib
+..\..\..\TC\lib\libtccore.lib
+..\..\..\TC\lib\libtccoreext.lib
+..\..\..\TC\lib\libtcinit.lib
+..\..\..\TC\lib\libtcsso.lib
+..\..\..\TC\lib\libtextsrv.lib
+..\..\..\TC\lib\libuser_exits.lib
+..\..\..\..\App\Java\lib\jawt.lib
+..\..\..\..\App\Java\lib\jvm.lib
+..\obj\DataExtractor.obj

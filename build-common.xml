@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="build-common" default="default">
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property environment="env" />
+    <property name="PROJECT_ROOT" value="${env.PROJECT_ROOT}"/>
+    <property name="PROJECT_NAME" value="${env.PROJECT_NAME}"/>
+    <property name="DEPLOY_ROOT" value="${env.DEPLOY_ROOT}"/>
+    <property name="TC_ROOT" value="${env.TC_ROOT}" />
+    <property name="TC_INCLUDE" value="${env.TC_INCLUDE}" />
+    
+    <import file="dependencies.xml"/>
+    <import file="build-${env.OS}.xml"/>
+    
+    <target name="default" depends="dist"/>
+    
+    <target name="dist.dependencies">
+        <antcall target="depend.${ant.project.name}">
+            <param name="dependency.target" value="dist"/>
+        </antcall>
+    </target>
+    
+    <target name="deploy.dependencies">
+        <antcall target="depend.${ant.project.name}">
+            <param name="dependency.target" value="deploy"/>
+        </antcall>
+    </target>
+
+    <target name="clean.dependencies">
+        <antcall target="depend.${ant.project.name}">
+            <param name="dependency.target" value="clean"/>
+        </antcall>
+    </target>
+
+</project>
