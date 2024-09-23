@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{bff2f2dc-a37b-4ab2-a138-7c8b73edc26f}</ProjectGuid>
+    <RootNamespace>ITKPractice</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="compile_run_create_item.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\action_handler_to_add_all_structure_children_to_target_list.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\action_handler_to_download_dataset_named_reference.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\action_handler_to_set_condition_result_with_message.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\add_dataset_named_reference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\add_int_to_int_array.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\add_required_reviewer.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\add_tag_to_tag_array.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_create_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_create_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_create_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_save_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_save_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\alias_save_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\allocate_string_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\apply_release_status_to_all_new_item_revisions.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\approve_review_task.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_all_dataset_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_current_users_home_folder.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_dataset_imanfile_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_file_format.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_if_instance_is_loaded_and_locked.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_imanfile_byte_size.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_imanfile_file_size.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_imanfile_path.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_imanfile_stats.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_item_of_master_form.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_item_revisions_master_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_item_revision_from_bom_line.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_item_revision_of_master_form.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_object_class_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_object_class_name_and_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_object_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_process_current_task.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_property_value_by_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ask_user_groups.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\attach_ADA_license_to_WorkspaceObject.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\build_similar_temp_filespec.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\change_release_status.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\clear_form_property_during_item_saveas_operation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\clone_process_from_template.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\compare_bom_views.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\convert_uid_to_tag.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_assignment_list.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_bop_window.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_company_location.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_item_with_mandatory_properties.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_modular_variant_persistent_sos.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_object_acl.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_project.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_relation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_relation_with_required_property.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_saved_variant_rule.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_schedule.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_schedule_deliverable.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_schedule_task_resource_assignment.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_schedule_task_with_workflow_template.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\create_tracelink.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\dataset_save_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\delete_all_folder_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\delete_all_table_property_rows.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\delete_dataset_named_reference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\delete_folder_from_home_folder.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_audit_get_records.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_BMF_ITEMREVISION_assign_rev_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_BMF_ITEM_assign_new_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_changing_current_group_and_role.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_different_ImanFile_names.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_disable_assign_child_line.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_manufacturing_BMF_ITEM_action_on_release.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_manufacturing_BMF_ITEM_create_or_ref_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_manufacturing_BMF_ITEM_sync.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_manufacturing_BOM_link_design_to_ebom.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_manufacturing_user_exit_create_or_ref_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_MPP_replace_occurrence.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_no_entry_query.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_qry_using_date.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_refactoring_grm_create.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_refactoring_item_create.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_refactoring_item_create_rev_using_ITK.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_removal_of_certain_reference_types.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\demo_undo_child_line_assign.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\describe_assignment_list.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\describe_classification_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\describe_classification_view.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\email_syslog.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ensure_user_is_infodba.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\export_backup_imanfile.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\extended_multi_level_bom_compare.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\extension_rule_to_block_revise_operation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_all_ChangeRequestRevision_with_problem_items.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_all_datasets_not_owned_by_user.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_all_datasets_owned_by_user.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_all_folders_of_object.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_forms_by_name_and_type.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_groupmember.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_items_by_owning_group_using_enquiry.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_items_by_owning_group_using_query.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\find_item_revisions_completed_jobs.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\free_string_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\gde_create_occurrence_custom.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_all_icos_of_workpaceobject.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_all_project_members.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_class_attr_id_by_class_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_class_attr_id_by_class_tag.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_class_attr_id_by_instance_tag.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_current_users_home_folder.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_newstuff_folder_contents.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_object_class_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_object_class_name_and_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_object_name_type_and_uid.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_object_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_parent_bomline_in_fnd0assignChildLine_extension_rule.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_persons_user_tags.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_project_team_tag.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_PSOccurrences_of_item.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_reference_attachments.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_release_status_attachments.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_signoff_attachments.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_signoff_audit_records.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_target_attachments.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\get_user_default_project.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\given_ReleaseStatus_display_name_get_real_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\given_ReleaseStatus_real_name_get_display_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\GTAC_strcmp.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\implement_sequencing_by_1_in_user_part_no.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\implement_sequencing_by_1_using_bmide_extension_rule_V10.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\import_os_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\import_text_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\insert_schedule.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\insert_task_and_schedule.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\install_asbuilt_part_revision.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_descendant_of_Form.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_descendant_of_POM_stub.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_instance_in_database.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_object_descendant_of_class.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_object_referenced.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_property_reference_value_type.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\is_workspace_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_createPost_extension.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ITEM_create_item.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_create_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_create_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_create_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_create_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_create_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_create_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_deep_copy_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_deep_copy_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_deep_copy_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_revise_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_revise_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_revise_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_as_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_as_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_as_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_revision_save_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_rev_revise_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\item_save_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_all_available_revision_rules.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_all_object_properties_and_values.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_all_occurrence_note_types.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_dataset_type_file_references.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_displayable_properties.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_displayable_properties_with_value.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_groupmembers_by_group.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_item_revisions_by_creation_date.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_primary_objects.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_secondary_objects.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_signoff_details_of_workspace_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_subtypes_of_type.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\list_values_of_multi_valued_preference.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\modify_date_released.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\modify_unit_of_measure_of_item.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\new_meprocess_from_template_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\new_meprocess_from_template_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\new_meprocess_from_template_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\new_process_using_query_results.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\notify_workflow_initiator.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\pick_one_of_two_options.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\pom_enquiry_using_POM_enquiry_bind_value.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\print_uid_of_object.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\prompt_for_existing_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\property_has_value.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\prop_ask_display_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\prop_set_value_string_returning_error.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_item_create_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_item_save_as_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_item_save_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_item_save_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_post_action_with_arguments.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_pre_action_with_arguments.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_pre_condition_with_arguments.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_ugmaster_save_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\register_ugpart_save_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\relation_create_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\relation_create_pre_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\relation_create_pre_condition.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\remove_folder_reference.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\remove_from_all_folders.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\remove_tag_from_tag_array.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\replacement_for_deprecated_MAIL_create_envelope.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\replace_assembly_in_context.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\replace_dataset_named_reference.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\replace_design_representation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_action_handler_message_information_summary.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_all_dataset_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_all_relation_info.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_all_ReleaseStatuses.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_attachment_information.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_attributes_of_classification_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_current_login_infomation.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_dataset_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_dataset_named_references_paths.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_decision_value.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_epm_action_message_information.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_epm_state.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_error.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_error_TCEng.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_error_traceback_stack.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_existing_bom_window_legacy_variant_options.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_folder_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_imanfile_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_item_description.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_logical_value.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_object_class_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_object_class_name_and_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_object_description.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_object_modified_date.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_object_type_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_occurrence_note_type_text.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_project_members.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_referencers_of_workspaceobject.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_referencing_jobs.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_signoff_team.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_task_and_subtasks.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\report_wso_object_string_and_owning_user.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\revise_item_revision.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\revise_item_revisions.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\safe_mem_free.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\send_item_revision_to_pse.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_client_input_mixed_data.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_client_input_selected_objects.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_client_input_string.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_client_input_string_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_returns_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_returns_object_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_returns_string.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\server_exit_returns_string_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_bom_window_legacy_variant_option.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_dataset_named_reference_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_item_revisions_master_form_property.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_master_form_properties_during_Item_creation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_modular_variant_persistent_sos.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_modular_variant_runtime_sos.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_occurence_note_text_from_BOMLine_add.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_occurence_note_text_from_PS_bvr_create_occs.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\set_user_license_status.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\simple_notify_handler.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\simple_report_generation.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\structure_search_by_item_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ugmaster_save_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\ugpart_save_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_AE_create_dataset_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_AE_delete_dataset_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_AE_export_file_msg.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_AE_save_dataset_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_GRM_copy.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_GRM_create.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_IMAN_save_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_copy_rev_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_copy_rev_to_existing_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_create_from_rev_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_create_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_create_rev_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_ITEM_deep_copy_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_PROJECT_create_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_TC_save_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\va_list_for_WSO_copy_msg.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\where_used_all_levels.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\where_used_one_level.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\where_used_top_level.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\write_plmxml_file.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\write_text_file_to_syslog_and_stdout.c" />
+    <ClCompile Include="..\..\teamcenter_itk_func_bulk_samples\write_to_stdout_and_syslog.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\action_handler_to_assign_resource_pool_as_reviewer.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\action_handler__to_set_signoff_custom_property.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_contents_to_ecm_folder.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_form_dataset_named_reference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_named_reference_to_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_or_replace_imanfile_dataset_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_ugpart_named_reference_to_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\add_user_to_group_and_role.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\append_text_to_text_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\append_to_text_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\ask_char_value_of_preference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\ask_memory_statistics.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\ask_users_last_login_date_and_time.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\ask_value_strings_of_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\assign_new_item_to_existing_project.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\bmide_register_workflow_handlers.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\checkin_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\check_for_valid_method.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\classify_new_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\clock.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_and_send_mail_with_attachment.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_a_folder.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_a_process.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_classification_class.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_custom_exit_legacy_dynamic_lov.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_dataset_and_add_named_ref.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_DirectModel_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_folder_or_report_item_description_from_api.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_form_and_set_string_array_values.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_item_and_attach_new_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_item_with_masters.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_legacy_dynamic_lov.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_legacy_variant_option.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_many_users.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_new_folder_and_insert_new_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_occurrence_effectivity.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_product_structure.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_schedule_and_set_custom_property.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\create_unit_of_measure.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\custom_audit_log_extension_for_EPMTask-Reject.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\custom_subscription_handler.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\dataset_delete_preaction_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\dataset_delete_preaction_using_extension_rules.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\delete_all_bomview_revisions.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\delete_all_item_revisions_object_acls.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\delete_all_stubs_of_extinct_site.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\delete_bvrs_of_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_action_and_rule_handler_error_handling.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_ae_save_dataset_post_action_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_bomline_paste_method_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_checkin_checkout_extensions_by_type.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_compare_real_name_with_display_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_create_items_from_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_evaluate_conditions_against_specified_item_revisions.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_finding_item_revisions.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_finding_item_revisions_from_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_item_creation.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_item_delete.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_mail_find_alias_vs_distribution_list.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_qry_find_objects_base_on_attributes_and_values.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_user_new_dataset_name_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_user_new_revision_id_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_user_validate_item_rev_id.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\demo_using_multiple_legacy_counters.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\detach_item_rev_attachments.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\disable_assign_new_item_id_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\dynamic_lov_with_descriptions.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\enter_error_code_to_see_associated_message_text.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\erase_duplicate_description_on_new_revision_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\erase_field_on_form_copy.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\evaluate_condition_using_user_session_parameter.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_all_transfer_modes.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_dataset_named_reference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_item_revisions_ugmaster_part_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_selected_dataset_imanfile_named_reference.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_specific_form_using_plmxml_export_utility.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\export_transfer_mode_by_name.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\find_parents_of_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\find_pom_users_puid_and_status.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\find_relation_type_tag.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\find_workspace_objects_created_after_a_given_date.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\find_workspace_objects_created_in_a_given_date_range.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_class_of_type.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_current_group_and_role_from_api.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_error_message.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_extension_rule_user_params.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_item_revisions_ugmaster.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_item_revision_of_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_item_revision_status_tag.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_item_revision_status_tags.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_latest_dataset_version_by_dataset_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_new_item_id_from_save_as_callback.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_problem_of_affected_items.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\get_release_status_list.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\implement_bom_sequencing_by_1_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\implement_bom_sequencing_by_1_using_custom_exits_TCE.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\implement_cached_runtime_property_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\implement_cached_string_array_runtime_property_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\import_jpeg_from_NX_as_new_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\import_qaf_dataset_named_reference.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\initiate_a_job.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\invoke_pdm_server_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\item_create_rev_post_action.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\item_create_rev_post_action_to_attach_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_all_business_object_types.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_all_dataset_named_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_all_relation_types.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_all_transfermode_names_and_uids.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_groups.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_inheritance_of_all_business_object_types.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_inheritance_of_business_object_type.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_item_revisions_secondary_objects.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_item_revision_acls.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_item_rev_attachments.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_item_rev_where_used.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_or_delete_newstuff_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_properties_of_business_object_type.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_properties_of_object_by_uid.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_properties_of_remote_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_properties_of_ugpart_attr_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_subgroups_of_group.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\list_users_projects.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\make_user_inactive.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\me_operation_from_template_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\me_process_from_template_method.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\overwrite_text_dataset_iman_file.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\perform_case_sensitive_query.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\preaction_on_checkin_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\print_custom_bom_view.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\print_selected_objects_names_from_custom_motif_button.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\property_ask_value_string_extension_rules.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\property_set_value_string_extension_rules.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\query_for_tasks_to_perform.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\read_text_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_bomline_property_methods.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_dataset_create_post_action_method_to_add_named_ref.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_folder_contents_property_methods.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_item_revision_method_to_checkout_copied_datasets.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_prop_ask_value_date_runtime_property.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_rule_handler_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_runtime_properties_from_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_tag_array_runtime_property.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\register_user_end_local_import_customization_using_custom_exits.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\relation_create_post_action_to_rename_secondary_object.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\remove_all_bomline_substitutes.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\remove_contents_of_a_ecm_folder.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\rename_dataset.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\replace_form_storage_class.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_attributes_of_classification_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_configuration_rule.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_current_site_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_current_users_access_to_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_current_users_home_folder_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_datasettype_references.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_dataset_and_named_references_last_modified_dates.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_dataset_imanfile_named_references_sizes.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_dataset_type_default_tool.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_groupmembers_by_user.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_imanfile_size.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_items_properties.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_item_revisions_master_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_item_revisions_owning_site_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_item_rev_bom_view_precision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_object_description.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_processes_of_item_revision.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_process_task_tree.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_pse_occurrence_children.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_publication_information_of_remote_item.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_searchable_sites.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_tc_version.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_users_current_group.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_users_login_group_and_role.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\report_user_groups.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\reset_items_unit_of_measure_to_null.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\revise_item_revision_using_deep_copy_rules.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\save_dataset_modifications.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_bypass_from_api.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_bypass_from_open_c.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_group_name.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_ico_attributes.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_items_unit_of_measure.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_item_revision_effectivity.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_item_revision_master_form_attribute_based_on_bom_attributes.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_item_rev_attachments_owner_and_group.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_item_rev_master_form_value_pre_v9.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_lov_string_values.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_modification_date.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_property_on_items_iman_reference_form.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_query_entries_and_values.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_user_id.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_user_status.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\set_values_for_classification_object.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\subscribe_to_custom_event.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\test_itk_init_module.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\user_exit_query_results_displayed_in_ui.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\user_exit_query_results_to_text_table.cxx" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\user_server_exits_returning_string.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\user_server_exits_returning_string_array.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\verify_convert_to_primary.c" />
+    <ClCompile Include="..\..\teamcenter_itk_prog_bulk_samples\write_item_names_matching_search_string_to_text_file.c" />
+    <ClCompile Include="create_item.cpp" />
+    <ClCompile Include="GetItemRevisionProperties.cpp" />
+    <ClCompile Include="Test_ITK_Init_Module.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Test_ITK_Init_Module.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
