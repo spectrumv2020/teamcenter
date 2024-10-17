@@ -1,0 +1,14 @@
+CISHomePath=D:\Apps\CIS_Update\FileInput
+InputCSVPath=$CISHomePath$\\input
+ReportsPath=$CISHomePath$\\reports
+LogsPath=$CISHomePath$\\logs
+#US Qual
+TC_4Tier_URL=https://USEA1SVTCAWCD02.MOOG.COM:8443/tc
+db.host=usea1svsqld19.moog.com
+db.dbname=CPaM
+db.user=CPaM_User
+db.password.isenrypted=NO
+db.password=PNuw8Z6VZ8L3ZmFR
+db.table=UpdateCISInfoToTc_Log
+db.field=TcUpd_DateTime
+itemproperty=ent4_jurisdiction_country,ip_classification

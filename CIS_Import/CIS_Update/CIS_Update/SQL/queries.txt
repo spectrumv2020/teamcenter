@@ -1,0 +1,37 @@
+USE [CPaM]
+GO
+
+INSERT INTO [dbo].[UpdateCISInfoToTc_Log]
+           ([ItemID]
+           ,[PartNumber]
+           ,[ExpCSV_DateTime]
+           ,[TcUpd_DateTime])
+     VALUES
+           (<ItemID, int,>
+           ,<PartNumber, varchar(100),>
+           ,<ExpCSV_DateTime, datetime,>
+           ,<TcUpd_DateTime, datetime,>)
+GO
+
+
+
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ID, ItemID, PartNumber, ExpCSV_DateTime) VALUES (22, 112, 'CC81316-001', '2023-08-14 10:00:00');
+
+
+New Records:
+
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (1011, 'GE74201-001', '2023-08-31 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (1012, 'GE74202-001', '2023-08-31 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (1013, 'GE74203-001', '2023-08-31 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (1014, 'GE74204-001', '2023-08-31 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (1015, 'GE74205-001', '2023-08-31 10:00:00');
+
+Update Records: -> Same Values -> Skip Scenario
+
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (112, 'CC81316-001', '2023-08-14 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (113, 'CC62148-434', '2023-08-14 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (114, 'CC72167-003', '2023-08-14 10:00:00');
+INSERT INTO [CPaM].[dbo].[UpdateCISInfoToTc_Log] (ItemID, PartNumber, ExpCSV_DateTime) VALUES (115, 'CC74227-001', '2023-08-14 10:00:00');
+
+
+DELETE [CPaM].[dbo].[UpdateCISInfoToTc_Log]

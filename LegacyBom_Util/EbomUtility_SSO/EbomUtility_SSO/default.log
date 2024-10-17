@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-11-08T10:14:59.237449800Z</date>
+  <millis>1667902499237</millis>
+  <nanos>449800</nanos>
+  <sequence>0</sequence>
+  <logger>com.javacodegeeks.snippets.core</logger>
+  <level>SEVERE</level>
+  <class>view.WriteLogEntriesToLogFile</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>severe message</message>
+</record>
+<record>
+  <date>2022-11-08T10:14:59.303460700Z</date>
+  <millis>1667902499303</millis>
+  <nanos>460700</nanos>
+  <sequence>1</sequence>
+  <logger>com.javacodegeeks.snippets.core</logger>
+  <level>WARNING</level>
+  <class>view.WriteLogEntriesToLogFile</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>warning message</message>
+</record>
+<record>
+  <date>2022-11-08T10:14:59.304384900Z</date>
+  <millis>1667902499304</millis>
+  <nanos>384900</nanos>
+  <sequence>2</sequence>
+  <logger>com.javacodegeeks.snippets.core</logger>
+  <level>INFO</level>
+  <class>view.WriteLogEntriesToLogFile</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>info message</message>
+</record>
+</log>

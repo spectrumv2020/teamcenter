@@ -1,0 +1,14 @@
+#<ConfigName>=<ConfigValue>
+CISHomePath=<UPDATE_EXECUTION_DIR_FULL_PATH>
+InputCSVPath=$CISHomePath$\\input
+ReportsPath=$CISHomePath$\\reports
+LogsPath=$CISHomePath$\\logs
+TC_4Tier_URL=https://USTC13QW01.MOOG.COM:8443/tc
+TC_SSO_URL=https://teamcentersso.moog.com/usquallogin133/sa
+TC_SSO_APPID=Tc13USQ
+db.host=usea1svsqld19.moog.com
+db.dbname=CPaM
+db.user=CPaM_User
+db.password=PNuw8Z6VZ8L3ZmFR
+db.table=UpdateCISInfoToTc_Log
+db.field=TcUpd_DateTime

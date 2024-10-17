@@ -1,0 +1,18 @@
+CISHomePath=C:\SB\CIS_Update\FileInput
+InputCSVPath=$CISHomePath$\\input
+ReportsPath=$CISHomePath$\\reports
+LogsPath=$CISHomePath$\\logs
+#TC_4Tier_URL=http://localhost:8080/tc
+#TC_4Tier_URL=https://USEA1SVTCAWCD01.MOOG.COM:8443/tc
+#PROD
+#TC_4Tier_URL=https://USEA1SVTCAWCD01.MOOG.COM:8443/tc
+#US DEV
+TC_4Tier_URL=https://USEA1SVTCSSD01.MOOG.COM:8443/tc
+#ECAD_Dev
+#TC_4Tier_URL=https://USEA1SVTCECAD01.moog.com:8443/tc
+db.host=usea1svsqld19.moog.com
+db.dbname=CPaM
+db.user=CPaM_User
+db.password=PNuw8Z6VZ8L3ZmFR
+db.table=UpdateCISInfoToTc_Log
+db.field=TcUpd_DateTime

@@ -1,0 +1,54 @@
+Processing Input File : C:\SB\CIS_Update\FileInput\input\ExportCIS_LotSize_10_16h15_9-August-2023F3_Item.csv
+=============================================================================================
+Part Library automatic update of Items\Latest Rev Attributes in Teamcenter
+==============================================================================================
+End Time                                             : 08-16-2023 10:31:47
+Start Time                                           : 08-16-2023_10-31-10
+TC URL                                               : https://USEA1SVTCECAD01.moog.com:8443/tc
+Executing User                                       : infodba
+Is DryRun                                            : False
+Number of Objects to be processed is                 : 10
+
+****************************NEW OBJECTS**************************************************
+Total Number of Items Created                       : 0
+
+****************************MODIFIED OBJECTS*********************************************
+Total Number of Items Modified                      : 0
+****************************SKIPPED OBJECTS*********************************************
+Total Number of Items Skipped Due to Released                        : 4
+Total Number of Items Skipped Due to All Property has Same Value     : 6
+Total Number of Items Skipped Due to Error in Property Update        : 0
+
+
+
+
+
+
+###### Updates Per Record ##################
+ItemID,Property Real Name,Property Existing Value in Tc,Property New Value, Result
+03024-022P,object_name,Ferrite Bead,03024-022P,30,4A,25%,SMD,1206,Ferrite Bead,03024-022P,30,4A,25%,SMD,1206,Not changed
+03024-022P,object_desc,99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC. 2023-07-19 CIS Export,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,Not changed
+WARNING : This Item [ 03024-022P ] already contains classification associated.
+03024-023M,object_name,Ferrite Bead,03024-023M,3A,20%,SMD,1206,Ferrite Bead,03024-023M,3A,20%,SMD,1206,Not changed
+03024-023M,object_desc,21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS 2023-07-19 CIS Export,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,Not changed
+WARNING : This Item [ 03024-023M ] already contains classification associated.
+06005-01HYC,object_name,Filter,DVMH28,2A,TH,Filter,DVMH28,2A,TH,Not changed
+06005-01HYC,object_desc,99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC. 2023-07-19 CIS Export,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,9-August-2023_CIS_Export : 99 - DESIGN AUTHORITY (PURCH PARTS) I.E. NAS, MS ETC.,Not changed
+WARNING : This Item [ 06005-01HYC ] already contains classification associated.
+06024-01HXC,object_name,Filter,DVMD28,TH,Filter,DVMD28,TH,Not changed
+06024-01HXC,object_desc,2023-07-19 CIS Export,9-August-2023_CIS_Export :,9-August-2023_CIS_Export :,9-August-2023_CIS_Export :,9-August-2023_CIS_Export :,Not changed
+WARNING : This Item [ 06024-01HXC ] already contains classification associated.
+1PPS2802G0,object_name,MCG ONLY,Optocouplers,PS2802-4-A,SMD,SO-16,MCG ONLY,Optocouplers,PS2802-4-A,SMD,SO-16,Not changed
+1PPS2802G0,object_desc,60 - COMPONENTS GROUP, BLACKSBURG OPS 2023-07-19 CIS Export,9-August-2023_CIS_Export : 60 - COMPONENTS GROUP, BLACKSBURG OPS,9-August-2023_CIS_Export : 60 - COMPONENTS GROUP, BLACKSBURG OPS,9-August-2023_CIS_Export : 60 - COMPONENTS GROUP, BLACKSBURG OPS,Not changed
+WARNING : This Item [ 1PPS2802G0 ] already contains classification associated.
+4200-0005,,,,RELEASED, HENCE SKIPPED
+RELEASED ITEM CLASSIFICATION: INFO : classification for this Item [ 4200-0005 ] has been successfully Created/ Updated.
+4200-0064-01,,,,RELEASED, HENCE SKIPPED
+RELEASED ITEM CLASSIFICATION: INFO : classification for this Item [ 4200-0064-01 ] has been successfully Created/ Updated.
+4200-0077-01,object_name,Inductor,10uH,20%,SMD,2010,Inductor,10uH,20%,SMD,2010,Not changed
+4200-0077-01,object_desc,21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS 2023-07-19 CIS Export,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,9-August-2023_CIS_Export : 21 - SPACE & DEFENSE GROUP, EAST AURORA OPERATIONS,Not changed
+WARNING : This Item [ 4200-0077-01 ] already contains classification associated.
+4200-0080-01,,,,RELEASED, HENCE SKIPPED
+RELEASED ITEM CLASSIFICATION: INFO : classification for this Item [ 4200-0080-01 ] has been successfully Created/ Updated.
+4570-0006-01,,,,RELEASED, HENCE SKIPPED
+RELEASED ITEM CLASSIFICATION: INFO : classification for this Item [ 4570-0006-01 ] has been successfully Created/ Updated.

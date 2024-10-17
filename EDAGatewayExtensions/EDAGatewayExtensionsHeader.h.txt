@@ -1,0 +1,137 @@
+#pragma once
+/*Moog EDA Gateway Extensions Header File
+*/
+
+
+#define DLLAPI __declspec(dllexport)
+#include <stdarg.h>
+#include<tccore/custom.h>
+#include<tccore/item.h>
+#include<tccore/method.h>
+#include<tccore/workspaceobject.h>
+#include<fclasses/tc_string.h>
+#include<tccore/aom_prop.h>
+#include<tccore/aom.h>
+#include<pom/enq/enq.h>
+#include <tc/preferences.h>
+#include <tccore/item_msg.h>
+#include <tc/tc_util.h>
+#include<epm/epm.h>
+#include<tccore/grm.h>
+#include<ae/ae.h>
+#include<sa/tcfile.h>
+#include <epm/signoff.h>
+#include<sa/sa.h>
+#include<epm/epm_task_template_itk.h>
+#include <tccore/grm_msg.h>
+#include<ae/dataset_msg.h>
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <set>
+#include <algorithm>
+#include <sys/stat.h>
+#include <user_exits/epm_toolkit_utils.h>
+#include <sstream>
+#include <regex>
+#include <base_utils/IFail.hxx>
+
+
+using namespace std;
+vector<string> split(const string& str, const string& delim);
+int Move_Derived_Dataset(tag_t tTargetItem, tag_t tDerivedDataset, string sPostFix);
+int Move_PCA_Variant_Dataset(tag_t tPCAObj, tag_t tPCAVariantObj);
+int Move_And_Rename_Dataset(tag_t tTargetItem, tag_t tPCAVariantObj, tag_t tDerivedDataset);
+int rename_PCA_Variant_named_reference(tag_t dataset_tag, string NewItemID);
+int getDatasetDetails(tag_t dataset_tag);
+int set_dataset_named_reference_name(tag_t dataset_tag);
+int updateSchematicAttributes(tag_t tPCARevision, tag_t tPWBRevision);
+bool isValidDatasetName_PCAVariant(const std::string& datasetname);
+bool isValidDatasetName_Schematic(const std::string& datasetname);
+bool isValidDatasetName_SchematicWithRev(const std::string& datasetname);
+int checkAndRenameSchDataset(tag_t dataset_tag);
+int renamePCAVariantDataset(tag_t dataset_tag);
+std::string getMoogPartRevID(tag_t dataset_tag);
+
+extern DLLAPI int Moog_EDAGateway_Custom(int* decision, va_list args);
+extern DLLAPI int method_AllegroDatasetMigration_PostAction(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_PWBDatasetMigration(METHOD_message_t* msg, va_list args);
+extern DLLAPI int method_MasterPlanCreation_PostAction(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_UpdateSchematicRevision(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_change_PWB_item_id(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_change_PCAVariants_item_id(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_EDA_SchematicRevision_Save(METHOD_message_t* msg, va_list args);
+extern DLLAPI int postAction_DatasetNameChange(METHOD_message_t* msg, va_list args);
+
+static int ask_instance_lock(tag_t instance);
+static void ECHO(const char* format, ...);
+int changeItemID(tag_t tItem, char* sNewItemID, bool isChangeRevName);
+int setPropertyValue(tag_t tObject, const char* sPropName, char* sPropValue);
+int setPropertyValueFromChar(tag_t tObject, const char* sPropName, std::string strValue);
+int remove_Dataset_relation(tag_t tMGPartObj);
+int remove_first_named_ref(tag_t dataset_tag);
+std::vector<std::string> splitString(const std::string& parentString, int chunkSize);
+std::string toUppercase(const std::string& str);
+std::vector<std::string> splitStringDelimiter(const std::string& input, const std::string& delimiter);
+
+#define IFERR_REPORT(X) (report_error( __FILE__, __LINE__, #X, X, FALSE))
+#define ERROR_CHECK(X) if (IFERR_REPORT(X)) return (X)
+
+#define ERROR_CHECK(X) if (IFERR_REPORT(X)) return (X)
+
+#define IS_EMPTY_STRING(X) (X == NULL || tc_strlen(X) == 0)
+
+#define SKFCALL( X ) \
+{   \
+   ifail      =   ITK_ok;                                                   \
+   EMH_clear_errors();                                                      \
+   if( ( ifail = ( X ) ) != ITK_ok )                                        \
+   {                                                                        \
+      int      n_ifails     =   0;                                          \
+      const int *severities   =   NULL;                                     \
+      const int *ifails      =   NULL;                                      \
+      const char **texts     =   NULL;                                      \
+      EMH_ask_errors( &n_ifails, &severities, &ifails, &texts );            \
+      if( n_ifails > 0 )                                                    \
+      {                                                                     \
+         if( texts[n_ifails-1] )                                            \
+         {                                                                  \
+            printf( "ERROR: %d ERROR MSG: %s.\n",                        \
+                           ifails[n_ifails-1],                              \
+                           texts[n_ifails-1] );                             \
+            TC_write_syslog( "ERROR: %d ERROR MSG: %s.\n",               \
+                           ifails[n_ifails-1],                              \
+                           texts[n_ifails-1] );                             \
+            TC_write_syslog ( "ERROR: FILE: %s LINE: %d\n",              \
+                           __FILE__,                                        \
+                           __LINE__ );                                      \
+         }                                                                  \
+      }                                                                     \
+      throw ifail;                                                          \
+   }                                                                        \
+}
+
+#define DD_RELATION_TYPE    EDAHasDerivedDataset
+#define ITK_CHECK(x) { \
+        if ( iFail == ITK_ok ) \
+        { \
+            if ( ( iFail = (x) ) != ITK_ok ) \
+            { \
+                char *error_str = NULL; \
+                EMH_ask_error_text ( iFail, &error_str ); \
+                           TC_write_syslog("ERROR: File %s, Function %s, Line Number: %d\n", __FILE__, __FUNCTION__, __LINE__);\
+                TC_write_syslog ( "ERROR: %d, ERROR MSG: %s.\n", iFail, error_str ); \
+                MEM_free ( error_str ); \
+            } \
+        } \
+        else \
+        { \
+            printf ( "Skipping Function Call %s\n", #x ); \
+        } \
+}
+
+static int report_error(const char* file, int line, const char* call, int status, logical exit_on_error);
+
+

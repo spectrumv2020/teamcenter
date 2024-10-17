@@ -1,0 +1,2243 @@
+/* This is a server side customization DLL project
+* to extend the EDA Datamodel. OOTB Datamodel needs to be further enhanced
+* to meet Moog's business requirements
+* Execution - Add all callbacks
+*Execution  - When EDAHasSchem
+*	When EDAHas Sch REL is created between Primary (PCA REV) and Secondarty (Schematic REV)
+*	Sch REV property update - Scematic Item Rev (Contains PCA ID, PCA REV ID, PWB ID & PWB REV ID Properties)
+*Execution  - When EDAHasDerivedDataset
+*	When EDAHasDerivedDataset REL is created between Primary (PCA REV) and Secondarty Datsets)
+*	Datasets moved to PWB Rev (all PWB related datasets gerber files, Assy drawings)
+*/
+
+#include "EDAGatewayExtensionsHeader.h"
+
+using namespace std;
+
+
+
+extern "C"
+{
+	extern DLLAPI int EDAGatewayExtensions_register_callbacks();
+}
+
+//Step 1 int FnName_register_callbacks()
+extern DLLAPI int EDAGatewayExtensions_register_callbacks()
+{
+	//log("Registering Moog Customized EDAGateway Extension DLL for Post Actions\n");	
+
+	int iFail = ITK_ok;
+	METHOD_id_t method_PWBDatasetMigration;
+	METHOD_id_t method_EDAHasPWB_SchematicRevisionProperty;
+	METHOD_id_t method_EDAHasSchematic_SchematicRevisionProperty;
+	METHOD_id_t method_EDAHasVariant_GRMPostAction;
+	METHOD_id_t method_EDA_SchematicRevision_Save;
+	METHOD_id_t method_DatasetImport_PostAction;
+	METHOD_id_t method_ZipImport_PostAction;
+
+	ITK_CHECK(CUSTOM_register_exit("Moog_EDAGateway", "USER_init_module", (CUSTOM_EXIT_ftn_t)Moog_EDAGateway_Custom));
+
+	/*POST ACTION FOR EDAHasPWB REL CREATE OPERATION*/
+	ITK_CHECK(METHOD_find_method("EDAHasPWB", GRM_create_msg, &method_EDAHasPWB_SchematicRevisionProperty));
+	if (method_EDAHasPWB_SchematicRevisionProperty.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_EDAHasPWB_SchematicRevisionProperty, METHOD_post_action_type, (METHOD_function_t)postAction_UpdateSchematicRevision, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering method_EDAHasPWB_SchematicRevisionProperty as Post-Action) Exception Occured...Details below ");
+			log("(method_EDAHasPWB_SchematicRevisionProperty),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+	//Registering POST action for appending '-0001' on PWB item id
+	if (method_EDAHasPWB_SchematicRevisionProperty.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_EDAHasPWB_SchematicRevisionProperty, METHOD_post_action_type, (METHOD_function_t)postAction_change_PWB_item_id, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering method_EDAHasPWB_SchematicRevisionProperty as Post-Action) Exception Occured...Details below ");
+			log("(method_EDAHasPWB_SchematicRevisionProperty),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}		
+	}
+
+	//Registering POST action for aligning item_id based on the Core PCA item_id
+	ITK_CHECK(METHOD_find_method("EDAHasVariant", GRM_create_msg, &method_EDAHasVariant_GRMPostAction));
+	if (method_EDAHasVariant_GRMPostAction.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_EDAHasVariant_GRMPostAction, METHOD_post_action_type, (METHOD_function_t)postAction_change_PCAVariants_item_id, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering method_EDAHasVariant_GRMPostAction as Post-Action) Exception Occured...Details below ");
+			log("(method_EDAHasVariant_GRMPostAction),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+
+	/*POST ACTION FOR EDAHasSchematic REL CREATE OPERATION*/
+	ITK_CHECK(METHOD_find_method("EDAHasSchematic", GRM_create_msg, &method_EDAHasSchematic_SchematicRevisionProperty));
+	if (method_EDAHasSchematic_SchematicRevisionProperty.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_EDAHasSchematic_SchematicRevisionProperty, METHOD_post_action_type, (METHOD_function_t)postAction_UpdateSchematicRevision, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering method_EDAHasSchematic_SchematicRevisionProperty as Post-Action) Exception Occured...Details below ");
+			log("(method_EDAHasSchematic_SchematicRevisionProperty),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+
+	/*POST ACTION FOR EDAHasDerivedDataset REL CREATE OPERATION*/
+	ITK_CHECK(METHOD_find_method("EDAHasDerivedDataset", GRM_create_msg, &method_PWBDatasetMigration));
+	if (method_PWBDatasetMigration.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_PWBDatasetMigration, METHOD_post_action_type, (METHOD_function_t)postAction_PWBDatasetMigration, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering postAction_PWBDatasetMigration as Post-Action for EDA PWB dataset creation) Exception Occured...Details below ");
+			log("(postAction_PWBDatasetMigration),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+	//ITK_CHECK(METHOD_find_method("ItemRevision", "IMAN_save", &method_EDA_SchematicRevision_Save));
+	//Dec/13th 2023 Sanjeev Beemidi; Changed from ItemRevision to E7_SchematicRevision
+	//to ensure that this postaction is not called for ALL Item Revisions SAVE operation.
+
+	ITK_CHECK(METHOD_find_method("E7_SchematicRevision", "IMAN_save", &method_EDA_SchematicRevision_Save));
+
+	if (method_EDA_SchematicRevision_Save.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_EDA_SchematicRevision_Save, METHOD_post_action_type, (METHOD_function_t)postAction_EDA_SchematicRevision_Save, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering postAction_EDA_SchematicRevision_Save as Post-Action) Exception Occured...Details below ");
+			log("(postAction_EDA_SchematicRevision_Save),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+	//ITK_CHECK(METHOD_find_method("Dataset", AE_import_file_msg, &method_DatasetImport_PostAction));	
+	//Dec/13th 2023 Sanjeev Beemidi; Changed from Dataset to PDF
+	//to ensure that this postaction is not called for ALL Dataset, only PDF
+	ITK_CHECK(METHOD_find_method("PDF", AE_import_file_msg, &method_DatasetImport_PostAction));
+	if (method_DatasetImport_PostAction.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_DatasetImport_PostAction, METHOD_post_action_type, (METHOD_function_t)postAction_DatasetNameChange, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering AE_import_file_fn as Post-Action when PDF Named Ref file is import) Exception Occured...Details below ");
+			log("(AE_import_file_fn),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+
+	ITK_CHECK(METHOD_find_method("Zip", AE_import_file_msg, &method_ZipImport_PostAction));
+	if (method_ZipImport_PostAction.id != NULL)
+	{
+		try {
+			ITK_CHECK(METHOD_add_action(method_ZipImport_PostAction, METHOD_post_action_type, (METHOD_function_t)postAction_DatasetNameChange, NULL));
+		}
+		catch (IFail& ex)
+		{
+			cout << "Exception Trace " << ex.ifail() << endl;
+			cout << ex.getMessage() << endl;
+			log("(Registering AE_import_file_fn as Post-Action when Zip Named Ref file is import) Exception Occured...Details below ");
+			log("(AE_import_file_fn),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+		}
+	}
+
+	//log("Successfully Completed Registering all Post Actions  \n");
+
+
+	return (iFail);
+}
+
+
+
+
+extern DLLAPI int Moog_EDAGateway_Custom(int* decision, va_list args)
+{
+	int iFail(ITK_ok);
+
+	//METHOD_id_t Method_id;
+	*decision = ALL_CUSTOMIZATIONS;
+
+	//ITK_CHECK(METHOD_find_method("ItemRevision","ITEM_copy_rev",&Method_id));
+	//ITK_CHECK(METHOD_add_action(Method_id,METHOD_post_action_type,(METHOD_function_t)Moog_itemrev_post_action,NULL));
+
+	return (iFail);
+}
+
+/*
+* Sample Dataset - Schematic ID  - ES1004085
+*/
+bool isValidDatasetName_Schematic(const std::string& datasetname) {
+	// Regular expression pattern to match the provided formats
+	std::regex pattern("ES1\\d{6}");
+
+	// Check if the datasetname matches the pattern
+	return std::regex_match(datasetname, pattern);
+}
+/*
+* Sample Dataset - Schematic ID  - ES1004085_01
+*/
+bool isValidDatasetName_SchematicWithRev(const std::string& datasetname) {
+	// Regular expression pattern to match the provided formats
+	std::regex pattern("ES1\\d{6}_\\d{2}|ES1\\d{6}_\\w{1}");
+
+	// Check if the datasetname matches the pattern
+	return std::regex_match(datasetname, pattern);
+}
+/*
+* Sample PCAVariant Dataset ID ID  - MG1000010-0001_01
+*/
+bool isValidDatasetName_PCAVariant(const std::string& datasetname) {
+	// Regular expression pattern to match the provided formats
+	std::regex pattern("ES\\d{7}-\\d{4}_\\d{2}|ES\\d{7}-\\d{4}_\\w{1}");
+
+	// Check if the datasetname matches the pattern
+	return std::regex_match(datasetname, pattern);
+}
+
+extern DLLAPI int postAction_change_PWB_item_id(METHOD_message_t* msg, va_list args)
+{
+	int iReturn = ITK_ok;
+	//Update your Logic here
+	/*
+	* get VA List
+	* get the Pasted Object
+	* Call Change Item ID Method.
+	*/
+
+	char* primaryItemID = NULL;
+	char* secondryItemID = NULL;
+
+	int ifail = ITK_ok;
+	try
+	{
+		log("(postAction_change_PWB_item_id) Pre-Validate Objects and check if it is for EDA..... \n");
+		/**** va_list for GRM_create_msg ***/
+		va_list largs;
+		va_copy(largs, args);
+		tag_t  primary_object = va_arg(largs, tag_t);
+		tag_t  secondary_object = va_arg(largs, tag_t);
+		tag_t  relation_type = va_arg(largs, tag_t);
+		tag_t  user_data = va_arg(largs, tag_t);
+		tag_t* new_relation = va_arg(largs, tag_t*);
+		va_end(largs);
+
+		if (primary_object == NULLTAG || secondary_object == NULLTAG) {
+			log("(postAction_change_PWB_item_id) primary_object or secondary_object is null, so returning..... \n");
+			return 0;
+		}
+
+		ERROR_CHECK(AOM_ask_value_string(primary_object, "item_id", &primaryItemID));
+		ERROR_CHECK(AOM_ask_value_string(secondary_object, "item_id", &secondryItemID));
+
+		if (IS_EMPTY_STRING(primaryItemID) || IS_EMPTY_STRING(secondryItemID)) {
+			log("(postAction_change_PWB_item_id) primaryItemID or secondryItemID is null, so returning..... \n");
+			return 0;
+		}
+
+		log("\t\t primary_object:  %s\n", primaryItemID);
+		log("\t\t secondary_object:  %s\n", secondryItemID);
+
+		if (tc_strstr(secondryItemID, "-") != NULL)
+		{
+			log("(postAction_change_PWB_item_id)Moog Part Number already has \"-\" number...\n Not changing its Item ID... So Returning...");
+			SAFE_SM_FREE(primaryItemID);
+			SAFE_SM_FREE(secondryItemID);
+			return  ifail;
+		}
+		else {
+			log("(postAction_change_PWB_item_id) Pre-Validation SUCCESS, Proceeding for EDA change_PWB_item_id changes..... \n");
+		}
+
+		char* pcNewItemID = MEM_sprintf("%s-0001", secondryItemID);
+
+		tag_t secObj = NULLTAG;
+
+		ERROR_CHECK(AOM_ask_value_tag(secondary_object, "items_tag", &secObj));
+
+		if (secObj != NULLTAG) {
+			changeItemID(secObj, pcNewItemID, false);
+		}
+
+		SAFE_SM_FREE(secondryItemID);
+		ERROR_CHECK(AOM_ask_value_string(secondary_object, "item_id", &secondryItemID));
+		if (!IS_EMPTY_STRING(secondryItemID)) {
+			log("\t\t secondary_object ID after changed: %s\n", secondryItemID);
+		}
+
+		SAFE_SM_FREE(primaryItemID);
+		SAFE_SM_FREE(secondryItemID);
+
+		log("(postAction_change_PWB_item_id) Execution SUCCESS, Completed for EDA change_PWB_item_id changes..... \n");
+	}
+	catch (IFail& ex)
+	{
+		cout << "Exception Trace " << ex.ifail() << endl;
+		cout << ex.getMessage() << endl;
+		log("(postAction_change_PWB_item_id) Exception Occured...Details below ");
+		log("(postAction_change_PWB_item_id),is [%d][%s]\n", ex.ifail(), ex.getMessage());		
+	}
+	return ifail;
+
+
+	return iReturn;
+}
+
+int changeItemID(tag_t tItem, char* sNewItemID, bool isChangeRevName)
+{
+	int iRetCode = ITK_ok;
+
+	tag_t tagItemMasterRel = NULLTAG;
+	tag_t tagItemRevisionsRel = NULLTAG;
+
+	int nItemRevCnt = 0;
+	int iRev = 0;
+	int num_of_bom_view = 0;
+	int num_of_bom_view_revs = 0;
+
+	tag_t* ptItemRev = NULL;
+	tag_t* ptBomViews = NULL;
+	tag_t* ptBomViewRevs = NULL;
+
+	log("Item ID Passed is %s\n", sNewItemID);
+
+	//Change ItemID for Item
+	ERROR_CHECK(setPropertyValue(tItem, "item_id", sNewItemID));
+
+	//Change ObjectName for Item Master
+	ERROR_CHECK(GRM_find_relation_type("IMAN_master_form", &tagItemMasterRel));//Check if it is Relation or Tag Property
+	if (tagItemMasterRel != NULLTAG)
+	{
+		int nItemMasterCnt = 0;
+		tag_t* ptItemMaster = NULL;
+		ERROR_CHECK(GRM_list_secondary_objects_only(tItem, tagItemMasterRel, &nItemMasterCnt, &ptItemMaster));
+		log("Item Master Cnt %d", nItemMasterCnt);
+		if (nItemMasterCnt > 0)
+		{
+			ERROR_CHECK(setPropertyValue(ptItemMaster[0], "object_name", sNewItemID));
+		}
+		SAFE_SM_FREE(ptItemMaster);
+	}
+	else
+	{
+		log("Item Master is not found!...");
+	}
+
+	//Change object_name of BOMView
+	ERROR_CHECK(ITEM_list_bom_views(tItem, &num_of_bom_view, &ptBomViews));
+
+	log("Bom View Count %d\n", num_of_bom_view);
+
+	if (num_of_bom_view > 0)
+	{
+		int iCntBomView = 0;
+		char* pcBOMViewName = MEM_sprintf("%s-View", sNewItemID);
+		for (iCntBomView = 0; iCntBomView < num_of_bom_view; iCntBomView++)
+		{
+			ERROR_CHECK(setPropertyValue(ptBomViews[iCntBomView], "object_name", pcBOMViewName));
+		}
+		SAFE_SM_FREE(pcBOMViewName);
+	}
+	SAFE_SM_FREE(ptBomViews);
+
+	//Change ObjectName for ItemRevMaster
+	ERROR_CHECK(ITEM_list_all_revs(tItem, &nItemRevCnt, &ptItemRev));
+	for (iRev = 0; iRev < nItemRevCnt; iRev++)
+	{
+		int
+			n_secondary_objects = 0;
+		tag_t
+			relation = NULLTAG,
+			* secondary_objects = NULL;
+		char* pcRevId = NULL;
+		char* pcFormName = NULL;
+
+		ERROR_CHECK(ITEM_ask_rev_id2(ptItemRev[iRev], &pcRevId));
+		pcFormName = MEM_sprintf("%s/%s", sNewItemID, pcRevId);
+		//To Change Revision object name
+		if (isChangeRevName)
+		{
+			setPropertyValue(ptItemRev[iRev], "object_name", sNewItemID);
+		}
+		ERROR_CHECK(GRM_find_relation_type("IMAN_master_form", &relation));
+		ERROR_CHECK(GRM_list_secondary_objects_only(ptItemRev[iRev], relation, &n_secondary_objects, &secondary_objects));
+
+		log("\nItem rev Master Cnt %d\n", n_secondary_objects);
+
+		if (n_secondary_objects > 0)
+		{
+			if (secondary_objects[0] != NULLTAG)
+			{
+				ERROR_CHECK(setPropertyValue(secondary_objects[0], "object_name", pcFormName));
+			}
+		}
+
+		ERROR_CHECK(AOM_ask_value_tags(ptItemRev[iRev], "structure_revisions", &num_of_bom_view_revs, &ptBomViewRevs));
+		log("Bom View Rev Count %d\n", num_of_bom_view_revs);
+
+		if (num_of_bom_view_revs > 0)
+		{
+			char* pcBVRName = MEM_sprintf("%s-View", pcFormName);
+			int iCntBomView = 0;
+			for (iCntBomView = 0; iCntBomView < num_of_bom_view; iCntBomView++)
+			{
+				ERROR_CHECK(setPropertyValue(ptBomViewRevs[iCntBomView], "object_name", pcBVRName));
+			}
+			SAFE_SM_FREE(pcBVRName);
+		}
+		SAFE_SM_FREE(ptBomViewRevs);
+		SAFE_SM_FREE(pcRevId);
+		SAFE_SM_FREE(pcFormName);
+		SAFE_SM_FREE(secondary_objects);
+	}
+	SAFE_SM_FREE(ptItemRev);
+
+	return iRetCode;
+}
+
+int setPropertyValue(tag_t tObject, const char* sPropName, char* sPropValue)
+{
+	int iRetCode = ITK_ok;
+
+	ERROR_CHECK(AOM_refresh(tObject, TRUE)); /* reload and lock for modify */
+	ERROR_CHECK(AOM_set_value_string(tObject, sPropName, sPropValue));
+	ERROR_CHECK(AOM_save_without_extensions(tObject));
+	ERROR_CHECK(AOM_refresh(tObject, FALSE));
+
+	return iRetCode;
+}
+
+int setPropertyValueFromChar(tag_t tObject, const char* sPropName, std::string strValue)
+{
+	int iRetCode = ITK_ok;
+
+	const char* constTB1 = strValue.c_str();
+	char* charTB1 = new char[strlen(constTB1) + 1];
+	strcpy(charTB1, constTB1);
+
+	log("sPropName is %s\n", sPropName);
+	log("strValue is %s\n", strValue);
+
+	ERROR_CHECK(AOM_refresh(tObject, TRUE)); /* reload and lock for modify */
+	ERROR_CHECK(AOM_set_value_string(tObject, sPropName, charTB1));
+	ERROR_CHECK(AOM_save_without_extensions(tObject));
+	ERROR_CHECK(AOM_refresh(tObject, FALSE));
+
+	//SAFE_SM_FREE(charTB1);
+
+	return iRetCode;
+}
+
+extern DLLAPI int postAction_change_PCAVariants_item_id(METHOD_message_t* msg, va_list args)
+{
+	int iReturn = ITK_ok;
+
+	char* primaryItemID = NULL;
+	char* secondryItemID = NULL;
+
+	tag_t tVariantsEDA = NULLTAG;
+
+	int nVariantCnt = 0;
+	tag_t* pVariants = NULL;
+
+	int ifail = ITK_ok;
+	try
+	{
+
+		log("(postAction_change_PCAVariants_item_id) Pre-Validate Objects and check if it is for EDA..... \n");
+		/**** va_list for GRM_create_msg ***/
+		va_list largs;
+		va_copy(largs, args);
+		tag_t  primary_object = va_arg(largs, tag_t);
+		tag_t  secondary_object = va_arg(largs, tag_t);
+		tag_t  relation_type = va_arg(largs, tag_t);
+		tag_t  user_data = va_arg(largs, tag_t);
+		tag_t* new_relation = va_arg(largs, tag_t*);
+		va_end(largs);
+
+		if (primary_object == NULLTAG || secondary_object == NULLTAG) {
+			log("(postAction_change_PCAVariants_item_id) primary_object or secondary_object is null, so returning..... \n");
+			return 0;
+		}
+
+		ERROR_CHECK(AOM_ask_value_string(primary_object, "item_id", &primaryItemID));
+		ERROR_CHECK(AOM_ask_value_string(secondary_object, "item_id", &secondryItemID));
+
+		if (IS_EMPTY_STRING(primaryItemID) || IS_EMPTY_STRING(secondryItemID)) {
+			log("(postAction_change_PCAVariants_item_id) primaryItemID or secondryItemID is null, so returning..... \n");
+			return 0;
+		}
+
+		log("\t\t primary_object:  %s\n", primaryItemID);
+		log("\t\t secondary_object:  %s\n", secondryItemID);
+
+		ERROR_CHECK(GRM_find_relation_type("EDAHasVariant", &tVariantsEDA));
+		if (tVariantsEDA == NULLTAG) {
+			log("(postAction_change_PCAVariants_item_id) tVariantsEDA is null, so returning..... \n");
+			return 0;
+		}
+
+		//Primary ID - PCA ID
+		//Secondary ID - PCA Variant ID
+
+		std::string primaryItemIDStr(primaryItemID);
+
+		//Check If the Last three Letters are PCA, -> then remove it.
+		if (primaryItemIDStr.length() > 3 && primaryItemIDStr.substr(primaryItemIDStr.length() - 3) == "PCA") {
+			primaryItemIDStr.erase(primaryItemIDStr.length() - 3);
+		}
+
+		//check If Secondry ID starts with Primary ID
+		bool bStartsWith = strncmp(secondryItemID, primaryItemIDStr.c_str(), primaryItemIDStr.length()) == 0;
+
+		//If Secondary ID already has - and starts with Primary ID, then Return
+		if (tc_strstr(secondryItemID, "-") != NULL && (bStartsWith))
+		{
+			log("(postAction_change_PCAVariants_item_id)PCA Variant Part Number already has \"-\" number...\n Not changing its Item ID");
+			SAFE_SM_FREE(primaryItemID);
+			SAFE_SM_FREE(secondryItemID);
+			return  ifail;
+		}
+		else {
+			log("(postAction_change_PCAVariants_item_id) Pre-Validation SUCCESS, Proceeding for EDA change_PCAVariants_item_id changes..... \n");
+		}
+
+		ERROR_CHECK(GRM_list_secondary_objects_only(primary_object, tVariantsEDA, &nVariantCnt, &pVariants));
+		log("Variants Cnt %d", nVariantCnt);
+
+
+		char* pcNewItemID = NULL;
+			
+		//If Primary ID starts with PCA, then follow Old Logic otherwise use new ID SChema
+		if (primaryItemIDStr.substr(0, 3) == "PCA") {
+			log("Primary Item ID starts with PVC --> %s \n", primaryItemIDStr);
+			pcNewItemID = MEM_sprintf("%s-000%d", primaryItemID, (nVariantCnt + 1));
+		}
+		else {
+			log("Primary Item ID doesn't starts with PCA --> %s \n", primaryItemIDStr);
+			pcNewItemID = MEM_sprintf("%s-000%dEKIT", primaryItemIDStr, (nVariantCnt + 1));
+		}
+			
+		log("New Variants ID is %s", pcNewItemID);
+
+		tag_t secObj = NULLTAG;
+
+		ERROR_CHECK(AOM_ask_value_tag(secondary_object, "items_tag", &secObj));
+
+		changeItemID(secObj, pcNewItemID, true);
+
+		tag_t tEDADerivedDSRel = NULLTAG;
+
+		ERROR_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tEDADerivedDSRel));
+		if (tEDADerivedDSRel != NULLTAG)
+		{
+			int nDSCnt = 0;
+			tag_t* pDatasets = NULL;
+			ERROR_CHECK(GRM_list_secondary_objects_only(secondary_object, tEDADerivedDSRel, &nDSCnt, &pDatasets));
+
+			if (nDSCnt > 0)
+			{
+				char* pcNewDSName = MEM_sprintf("%s_variant_sch", pcNewItemID);
+				setPropertyValue(pDatasets[0], "object_name", pcNewDSName);
+
+				SAFE_SM_FREE(pcNewDSName);
+
+			}
+			SAFE_SM_FREE(pDatasets);
+		}
+
+		SAFE_SM_FREE(pcNewItemID);
+		SAFE_SM_FREE(pVariants);
+
+		SAFE_SM_FREE(secondryItemID);
+		ERROR_CHECK(AOM_ask_value_string(secondary_object, "item_id", &secondryItemID));
+		cout << "\t\t secondary_object ID after changed: " << secondryItemID << endl;
+		SAFE_SM_FREE(primaryItemID);
+		SAFE_SM_FREE(secondryItemID);
+
+		//Call new Method and write implementation for Moving Dataset from PCA Variant to Schematic
+		Move_PCA_Variant_Dataset(primary_object, secondary_object);
+
+		log("(postAction_change_PCAVariants_item_id)Execution SUCCESS, completed for EDA change_PCAVariants_item_id changes..... \n");
+
+	}
+	catch (IFail& ex)
+	{
+		cout << "Exception Trace " << ex.ifail() << endl;
+		cout << ex.getMessage() << endl;
+		log("(postAction_change_PCAVariants_item_id) Exception Occured...Details below ");
+		log("(postAction_change_PCAVariants_item_id),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+	return ifail;
+
+	return iReturn;
+}
+
+/*
+* Get PCA Variant Derived Dataset and Add it to Schematic Revision.
+* get Schematic revision from PVA Revision Object.
+*/
+int Move_PCA_Variant_Dataset(tag_t tPCAObj, tag_t tPCAVariantObj) 
+{
+	int iFail = ITK_ok;
+
+	log("(Move_PCA_Variant_Dataset) Entered new Method..... \n");
+
+	tag_t tEDADerivedDSRel = NULLTAG;
+	tag_t tHasSchematic = NULLTAG;
+	int nSecObjCntSch = 0;
+	tag_t* ptSecObjsSch = NULL;
+
+	ERROR_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tEDADerivedDSRel));
+	ITK_CHECK(GRM_find_relation_type("EDAHasSchematic", &tHasSchematic));
+
+	if (tEDADerivedDSRel != NULLTAG && tHasSchematic != NULLTAG)
+	{
+		int nDSCnt = 0;
+		tag_t* pDatasets = NULL;
+		ERROR_CHECK(GRM_list_secondary_objects_only(tPCAVariantObj, tEDADerivedDSRel, &nDSCnt, &pDatasets));
+
+		if (nDSCnt > 0)
+		{
+			//setPropertyValue(pDatasets[0], "object_name", pcNewDSName);
+			log("(Move_PCA_Variant_Dataset) -- PCA Variant Derived Dataset Count > 0 \n");
+			//GRM list PWB
+			ITK_CHECK(GRM_list_secondary_objects_only(tPCAObj, tHasSchematic, &nSecObjCntSch, &ptSecObjsSch));
+			if (nSecObjCntSch > 0) {
+
+				log("(Move_PCA_Variant_Dataset) -- Schematic Count > 0 \n");
+				tag_t tTargetItem = ptSecObjsSch[0];
+				tag_t tDerivedDataset = pDatasets[0];
+
+				Move_And_Rename_Dataset(tTargetItem, tPCAVariantObj, tDerivedDataset);
+			}
+			SAFE_SM_FREE(ptSecObjsSch);
+		}
+		SAFE_SM_FREE(pDatasets);
+	}
+
+	log("Exiting (Move_PCA_Variant_Dataset) Method..... \n");
+
+	return iFail;
+}
+
+//Define a post action while EDA has derived data set relation is created on PCA
+//assembly files, gerber files etc are moved under PWB
+//Primary is PCA Rev and Secondary is Dataset
+//used move_Derived_Dataset functions
+
+
+extern DLLAPI int postAction_PWBDatasetMigration(METHOD_message_t* msg, va_list args)
+{
+
+	int iFail = ITK_ok;
+	char* object_type = NULL;
+	tag_t  primary_object = NULLTAG;
+	tag_t  secondary_object = NULLTAG;
+	tag_t  relation_type = NULLTAG;
+	tag_t tHasDerivedDatasetRel = NULLTAG;
+	tag_t tHasPWB = NULLTAG;
+	tag_t tHasMP = NULLTAG;
+	tag_t tImanSpec = NULLTAG;
+	tag_t tHasPCAVariant = NULLTAG;
+	tag_t tHasSchematic = NULLTAG;
+
+	int nSecObjCntSch = 0;
+	tag_t* ptSecObjsSch = NULL;
+	int nPrimaryObjCntPCA = 0;
+	tag_t* ptPrimaryObjsPCA = NULL;
+	int nSecObjCntPWB = 0;
+	tag_t* ptSecObjsPWB = NULL;
+	int nSecObjCntMP = 0;
+	tag_t* ptSecObjsMP = NULL;
+	char* pcObjType = NULL;
+	tag_t* new_relation = NULL;
+	tag_t user_data1 = NULLTAG;
+	char* der_dat_name = NULL;
+	string newName = "";
+
+	//to take massege arugument
+	primary_object = va_arg(args, tag_t);
+	secondary_object = va_arg(args, tag_t);
+	relation_type = va_arg(args, tag_t);
+	user_data1 = va_arg(args, tag_t);
+	new_relation = va_arg(args, tag_t*);
+
+	try { //try
+		log("(postAction_PWBDatasetMigration) Pre-Validate Objects and check if it is for EDA..... \n");
+
+		if (primary_object == NULLTAG || secondary_object == NULLTAG) {
+			log("(postAction_PWBDatasetMigration) primary_object or secondary_object is null, so returning..... \n");
+			return 0;
+		}
+
+		//get relation type tags
+		ITK_CHECK(GRM_find_relation_type("EDAHasVariant", &tHasPCAVariant));//Change 3 - Has Variant Relation
+		ITK_CHECK(GRM_find_relation_type("EDAHasSchematic", &tHasSchematic));//Change 4 - Has Schematic Relation
+		ITK_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tHasDerivedDatasetRel));
+		ITK_CHECK(GRM_find_relation_type("EDAHasPWB", &tHasPWB));
+		ITK_CHECK(GRM_find_relation_type("E7EDAHasMasterPattern", &tHasMP));
+		ITK_CHECK(GRM_find_relation_type("IMAN_specification", &tImanSpec));
+		ITK_CHECK(WSOM_ask_object_type2(primary_object, &object_type));
+
+		if (!(tc_strcmp(object_type, "E7_PCARevision") == 0 || tc_strcmp(object_type, "E7_PCA_VariantRevision") == 0)) {//Change 1 - PCAVariant Revision
+			log("(postAction_PWBDatasetMigration) object_typeis not EDA Related,,(E7_PCARevision), so returning..... \n");
+			return 0;
+		}
+		else if (tc_strcmp(object_type, "E7_PCA_VariantRevision") == 0) {//Change 2 - PCAVariant Revision
+			log("(postAction_PWBDatasetMigration) Pre-Validation SUCCESS for E7_PCA_VariantRevision, Proceeding for EDA PWBDatasetMigration changes..... \n");
+			//GRM list - from PCA Variant Rev get PCA Revision
+			ITK_CHECK(GRM_list_primary_objects_only(primary_object, tHasPCAVariant, &nPrimaryObjCntPCA, &ptPrimaryObjsPCA));
+
+			if (nPrimaryObjCntPCA > 0) {
+				log("(postAction_PWBDatasetMigration) -- PCA Count > 0 \n");
+				//GRM list - From PCA Revision get Schematic Revision
+				ITK_CHECK(GRM_list_secondary_objects_only(ptPrimaryObjsPCA[0], tHasSchematic, &nSecObjCntSch, &ptSecObjsSch));
+				if (nSecObjCntSch > 0) {
+
+					log("(postAction_PWBDatasetMigration) -- Schematic Count > 0 \n");
+					tag_t tTargetItem = ptSecObjsSch[0];
+					tag_t tDerivedDataset = secondary_object;
+					
+					Move_And_Rename_Dataset(tTargetItem, primary_object, tDerivedDataset);
+				}
+				SAFE_SM_FREE(ptSecObjsSch);
+			}
+			SAFE_SM_FREE(ptPrimaryObjsPCA);
+			log("(postAction_PWBDatasetMigration) Execution SUCCESS for E7_PCA_VariantRevision, Completed for EDA PWBDatasetMigration changes..... \n");
+		}
+		else {
+			log("(postAction_PWBDatasetMigration) Pre-Validation SUCCESS, Proceeding for EDA PWBDatasetMigration changes..... \n");
+			//GRM list PWB
+			ITK_CHECK(GRM_list_secondary_objects_only(primary_object, tHasPWB, &nSecObjCntPWB, &ptSecObjsPWB));
+			//GRM list MP
+			ITK_CHECK(GRM_list_secondary_objects_only(primary_object, tHasMP, &nSecObjCntMP, &ptSecObjsMP));
+
+			ITK_CHECK(AOM_ask_value_string(secondary_object, "object_name", &der_dat_name));
+
+			if (nSecObjCntPWB > 0) {
+
+				tag_t tTargetItem = ptSecObjsPWB[0];
+				tag_t tDerivedDataset = secondary_object;
+				string sPCADerivedDatasetName = der_dat_name;
+
+				// Update Schematic Item Revision PCA & PWB Attributes values
+				// updateSchematicAttributes(primary_object, tTargetItem);
+				//Needed when Revising Moog Part Revision.
+				remove_Dataset_relation(tTargetItem);
+
+				ITK_CHECK(AOM_ask_value_string(tTargetItem, "object_type", &pcObjType));
+
+				if (tc_strcasecmp("AD4_Mech_PartRevision", pcObjType) == 0) {
+
+
+					//SS-->Update the custom attributes required for attribute mapping
+					log("\n+++Moog INFO: Starting update the custom attribute e7_pca_id.\n");
+
+
+					if (sPCADerivedDatasetName.find("_assy_drg") != std::string::npos)
+					{
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_Assy");
+					}
+
+					else if (sPCADerivedDatasetName.find("_assySupport") != std::string::npos) {
+
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_Assy");
+
+					}
+					else if (sPCADerivedDatasetName.find("_gerber_drg") != std::string::npos) {
+
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_Gerber");
+
+					}
+					else if (sPCADerivedDatasetName.find("_gerber") != std::string::npos) {
+
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_Manuf");
+
+					}
+					else if (sPCADerivedDatasetName.find("_master_drg") != std::string::npos) {
+
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_MD");
+
+					}
+					else if (sPCADerivedDatasetName.find("_mp_drg") != std::string::npos) {
+
+						Move_Derived_Dataset(tTargetItem, tDerivedDataset, "_MP");
+
+					}
+				}
+				SAFE_SM_FREE(pcObjType);
+			}
+			SAFE_SM_FREE(ptSecObjsPWB);
+			SAFE_SM_FREE(ptSecObjsMP);
+			SAFE_SM_FREE(der_dat_name);
+
+			log("(postAction_PWBDatasetMigration) Execution SUCCESS, Completed for EDA PWBDatasetMigration changes..... \n");
+		}
+
+		log("\n+++Moog INFO: EXITING postAction_PWBDatasetMigration  \n");
+	}//try
+
+	catch (IFail& ex)
+	{
+		log("(postAction_PWBDatasetMigration) Exception Occured...Details below ");
+		log("(postAction_PWBDatasetMigration),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+
+	return iFail;
+}
+
+/*
+//Define a post action while EDA has Schematic  relation is created on PCA
+//Primary is PCA Rev and Secondary is Schematic Rev
+//used move_Derived_Dataset functions
+//Schematic Item Rev Property Update
+//Scematic Item Rev(Contains PCA ID, PCA REV ID, PWB ID& PWB REV ID Properties)
+//PCA REVISION(PRIMARY OBJ)
+//EDAHasPWB on RELATION CREATION->POST ACTION TO UPDATE SCEMATIC REV PROPERTIES)
+//PWB REV(SEC OBJ)
+//EDAHasScematic on Relation Creation - > POST ACTION TO UPDATE SCEMATIC REV PROPERTIES)
+//SCHEMATIC REV(SEC OBJ)
+
+*/
+
+extern DLLAPI int postAction_UpdateSchematicRevision(METHOD_message_t* msg, va_list args)
+{
+	int iFail = ITK_ok;
+	char* primary_object_type = NULL;
+	char* secondary_object_type = NULL;
+	tag_t  primary_object = NULLTAG;
+	tag_t  secondary_object = NULLTAG;
+	tag_t  relation_type = NULLTAG;
+	tag_t tHasPWB = NULLTAG;
+
+	int nSecObjCntPWB = 0;
+	tag_t* ptSecObjsPWB = NULL;
+	tag_t* new_relation = NULL;
+	tag_t user_data1 = NULLTAG;
+	string newName = "";
+
+	try { //try
+		log("(postAction_UpdateSchematicRevision) Pre-Validate Schematic Revision and check if it is for EDA..... \n");
+		//calling the funtion
+
+		//to take massege arugument
+		primary_object = va_arg(args, tag_t);
+		secondary_object = va_arg(args, tag_t);
+		relation_type = va_arg(args, tag_t);
+		user_data1 = va_arg(args, tag_t);
+		new_relation = va_arg(args, tag_t*);
+
+		if (primary_object == NULLTAG || secondary_object == NULLTAG) {
+			log("(postAction_UpdateSchematicRevision) primary_object or secondary_object is null, so returning..... \n");
+			return 0;
+		}
+
+		//get relation type tags
+
+		ITK_CHECK(GRM_find_relation_type("EDAHasPWB", &tHasPWB));
+
+		if (tHasPWB == NULLTAG) {
+			log("(postAction_UpdateSchematicRevision) tHasPWB is null, so returning..... \n");
+			return 0;
+		}
+
+		ITK_CHECK(WSOM_ask_object_type2(primary_object, &primary_object_type));
+		ITK_CHECK(WSOM_ask_object_type2(secondary_object, &secondary_object_type));
+
+		if (IS_EMPTY_STRING(primary_object_type) || IS_EMPTY_STRING(secondary_object_type)) {
+			log("(postAction_UpdateSchematicRevision) primary_object_type or secondary_object_type is null, so returning..... \n");
+			return 0;
+		}
+
+		log("\n+++Moog INFO: PRIMARY OBJ : %s \n", primary_object_type);
+		log("\n+++Moog INFO: SECONDARY OBJ : %s \n", secondary_object_type);
+
+		if (!(tc_strcmp(primary_object_type, "E7_PCARevision") == 0 && tc_strcmp(secondary_object_type, "E7_SchematicRevision") == 0)) {
+			log("(postAction_UpdateSchematicRevision) Primary Object and Secondary Object are not EDA Related,,(E7_PCARevision, E7_SchematicRevision), so returning..... \n");
+			return 0;
+		}
+		else {
+			log("(postAction_UpdateSchematicRevision) Pre-Validation SUCCESS, Proceeding for EDA Update SchematicRevision..... \n");
+			//GRM list PWB
+			ITK_CHECK(GRM_list_secondary_objects_only(primary_object, tHasPWB, &nSecObjCntPWB, &ptSecObjsPWB));
+
+			if (nSecObjCntPWB > 0) {
+
+				tag_t tPWBItemRev = ptSecObjsPWB[0];
+
+				// Update Schematic Item Revision PCA & PWB Attributes values
+				updateSchematicAttributes(primary_object, secondary_object);
+			}
+
+			SAFE_SM_FREE(ptSecObjsPWB);
+
+			log("(postAction_UpdateSchematicRevision) Execution SUCCESS, Completed for EDA Update SchematicRevision..... \n");
+		}
+
+		log("\n+++Moog INFO: EXITING postAction_UpdateSchematicRevision  \n");
+	}//try
+
+	catch (IFail& ex)
+	{
+		log("(postAction_UpdateSchematicRevision) Exception Occured...Details below ");
+		log("(postAction_UpdateSchematicRevision),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+
+
+
+
+	return iFail;
+}
+
+
+
+int updateSchematicAttributes(tag_t tPCARevision, tag_t tSchematicRevision) {
+
+	log("\n+++Moog INFO: ENTERING updateSchematicAttributes \n");
+
+	int iFail = ITK_ok;
+
+	int nSecObjCntPCB = 0;
+	tag_t* ptSecObjsPCB = NULL;
+	tag_t tEDAHasPWBRel = NULL;
+
+	try { //try
+
+		ITK_CHECK(GRM_find_relation_type("EDAHasPWB", &tEDAHasPWBRel));
+
+		ITK_CHECK(GRM_list_secondary_objects_only(tPCARevision, tEDAHasPWBRel, &nSecObjCntPCB, &ptSecObjsPCB));
+
+		if (nSecObjCntPCB > 0) {
+
+			tag_t tPWBRevision = ptSecObjsPCB[0];
+
+			char* sPCAID = NULL;
+			char* sPCAREVID = NULL;
+			char* sPWDID = NULL;
+			char* sPWBREVID = NULL;
+			ITK_CHECK(AOM_ask_value_string(tPCARevision, "item_id", &sPCAID));
+			ITK_CHECK(AOM_ask_value_string(tPCARevision, "item_revision_id", &sPCAREVID));
+			ITK_CHECK(AOM_ask_value_string(tPWBRevision, "item_id", &sPWDID));
+			ITK_CHECK(AOM_ask_value_string(tPWBRevision, "item_revision_id", &sPWBREVID));
+
+			ITK_CHECK(AOM_refresh(tSchematicRevision, true));
+
+			ITK_CHECK(AOM_set_value_string(tSchematicRevision, "e7_pca_id", sPCAID));
+			ITK_CHECK(AOM_set_value_string(tSchematicRevision, "e7_pca_rev_id", sPCAREVID));
+			ITK_CHECK(AOM_set_value_string(tSchematicRevision, "e7_pwb_id", sPWDID));
+			ITK_CHECK(AOM_set_value_string(tSchematicRevision, "e7_pwb_rev_id", sPWBREVID));
+
+			ITK_CHECK(AOM_save_without_extensions(tSchematicRevision));
+
+			ITK_CHECK(AOM_refresh(tSchematicRevision, false));
+
+			SAFE_SM_FREE(sPCAID);
+			SAFE_SM_FREE(sPCAREVID);
+			SAFE_SM_FREE(sPWDID);
+			SAFE_SM_FREE(sPWBREVID);
+
+
+			log("\n+++Moog INFO: PCB UPDATED \n");
+
+		}
+
+		SAFE_SM_FREE(ptSecObjsPCB);
+		log("\n+++Moog INFO: EXISTING updateSchematicAttributes \n");
+
+	}//try
+
+	catch (IFail& ex)
+	{
+		log("(postAction_DatasetNameChange) Exception Occured...Details below ");
+		log("(postAction_DatasetNameChange),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+
+	return iFail;
+}
+/*
+* From Dataset get Moog Part Revision ID
+* From Dataset get Primary Object in IMAN_Specification Relation
+* if Primary Object type is AD4_Mech_PartRevision, then return Revision ID. else return Empty string.
+*/
+std::string getMoogPartRevID(tag_t dataset_tag) {
+	int iFail = ITK_ok;
+	int nPrimaryObjCntMGPart = 0;
+
+	tag_t tImanSpecRel = NULLTAG;
+	tag_t* ptPrimaryObjsMGPart = NULL;
+
+	char* object_type = NULL;
+	char* MGPartRevID = NULL;
+	char* dataset_name = NULL;
+	std::string result;
+
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+
+	log("####----getMoogPartRevID dataset name is --> [%s] \n", dataset_name);
+
+	ITK_CHECK(GRM_find_relation_type("IMAN_specification", &tImanSpecRel));
+	ITK_CHECK(GRM_list_primary_objects_only(dataset_tag, tImanSpecRel, &nPrimaryObjCntMGPart, &ptPrimaryObjsMGPart));
+
+	log("####----getMoogPartRevID MG Part count is --> [%d] \n", nPrimaryObjCntMGPart);
+
+	if (nPrimaryObjCntMGPart > 0) {
+		ITK_CHECK(WSOM_ask_object_type2(ptPrimaryObjsMGPart[0], &object_type));
+
+		if (tc_strcmp(object_type, "AD4_Mech_PartRevision") == 0) {
+
+			ITK_CHECK(AOM_ask_value_string(ptPrimaryObjsMGPart[0], "item_revision_id", &MGPartRevID));
+
+			result = MGPartRevID;
+		}
+	}
+	SAFE_SM_FREE(dataset_name);
+	SAFE_SM_FREE(ptPrimaryObjsMGPart);
+	SAFE_SM_FREE(object_type);
+	SAFE_SM_FREE(MGPartRevID);
+
+	return result;
+}
+
+/*
+* Name Change Logic for PCA Derived Dataset stored under Moog Part Revision
+* Pass Dataset
+* Get Dataset type
+* Based on Dataset Type, Pass Reference(PDF-PDF_Reference, Zip-ZIPFILE) and get Original file name.
+* update file name with Moog Part Name.
+* Finally set the original file name and save, unlock the file.
+*/
+int set_dataset_named_reference_name(tag_t dataset_tag, string NewItemID)
+{
+	int iFail = ITK_ok,
+		ii = 0,
+		reference_count = 0;
+	AE_reference_type_t reference_type;
+	tag_t file_tag = NULLTAG;
+	char* object_type = NULL;
+	char* dataset_obj_name = NULL;
+	char* reference_name = NULL;
+	char* namedRefName = NULL;
+	bool DatasetCondition = false;
+	tag_t reference_object;
+
+	ITK_CHECK(WSOM_ask_object_type2(dataset_tag, &object_type));
+
+	if (IS_EMPTY_STRING(object_type)) {
+		return 0;
+	}
+
+	log("Dataset type is %s\n", object_type);
+
+	iFail = remove_first_named_ref(dataset_tag);
+
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_obj_name));
+
+	if (tc_strcasecmp("PDF", object_type) == 0) {
+
+		ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+		if (reference_count > 0)
+		{
+			for (ii = 0; ii < reference_count; ii++)
+			{
+				ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, ii, &reference_name, &reference_type, &reference_object));
+			}
+		}
+		if (reference_name == NULL || IS_EMPTY_STRING(reference_name))
+			return 0;
+
+		ITK_CHECK(AE_ask_dataset_named_ref2(dataset_tag, reference_name, &reference_type, &file_tag));
+		DatasetCondition = true;
+	}
+	else if (tc_strcasecmp("Zip", object_type) == 0) {
+		ITK_CHECK(AE_ask_dataset_named_ref2(dataset_tag, "ZIPFILE", &reference_type, &file_tag));
+		DatasetCondition = true;
+	}
+
+	if (file_tag != NULLTAG && DatasetCondition) {
+		ITK_CHECK(IMF_ask_original_file_name2(file_tag, &namedRefName));
+
+		if (IS_EMPTY_STRING(namedRefName))
+			return 0;
+
+		printf("\n Named Reference Name: %s \n", namedRefName);
+
+		std::string oldFileName = string(namedRefName);
+
+		// Replace '/' with '_'
+		std::replace(NewItemID.begin(), NewItemID.end(), '/', '_');
+
+
+		string dsetName = dataset_obj_name;
+
+		if (dsetName.find("_assy_drg") != std::string::npos || dsetName.find("_assySupport") != std::string::npos || dsetName.find("_gerber_drg") != std::string::npos || dsetName.find("_gerber") != std::string::npos || dsetName.find("_master_drg") != std::string::npos || dsetName.find("_mp_drg") != std::string::npos || dsetName.find("_Assy") != std::string::npos || dsetName.find("_Assy") != std::string::npos || dsetName.find("_Manuf") != std::string::npos || dsetName.find("_Gerber") != std::string::npos || dsetName.find("_MD") != std::string::npos || dsetName.find("_MP") != std::string::npos)
+		{
+			size_t underscorePos = NewItemID.find('_');
+
+			if (underscorePos != std::string::npos) {
+				NewItemID = NewItemID.substr(0, underscorePos);
+			}
+		}
+
+		bool use_new_logic = true;
+		std::string newFileName;
+		std::string strPcaRevID = getMoogPartRevID(dataset_tag);
+
+		if (!strPcaRevID.empty()) {
+			log("strPcaRevID is not Empty %s\n", strPcaRevID);
+			NewItemID = NewItemID + "_" + strPcaRevID;
+		}
+
+		if (dsetName.find("_assy_drg") != std::string::npos || dsetName.find("_assySupport") != std::string::npos || dsetName.find("_Assy") != std::string::npos)
+		{
+			newFileName = NewItemID + "_Assy";
+		}
+		else if (dsetName.find("_gerber_drg") != std::string::npos || dsetName.find("_Gerber") != std::string::npos) {
+			newFileName = NewItemID + "_Gerber";
+		}
+		else if (dsetName.find("_gerber") != std::string::npos || dsetName.find("_Manuf") != std::string::npos) {
+			newFileName = NewItemID + "_Manuf";
+		}
+		else if (dsetName.find("_master_drg") != std::string::npos || dsetName.find("_MD") != std::string::npos) {
+			newFileName = NewItemID + "_MD";
+		}
+		else if (dsetName.find("_mp_drg") != std::string::npos || dsetName.find("_MP") != std::string::npos) {
+			newFileName = NewItemID + "_MP";
+		}
+		else {
+			use_new_logic = false;
+			// Find the position of "_Base" in oldFileName
+			size_t basePos = oldFileName.find("_Base");
+
+			if (basePos != std::string::npos) {
+				// Merge with NewItemID while keeping "_Base"
+				newFileName = NewItemID + oldFileName.substr(basePos);
+			}
+			else {
+				// "_Base" not found in oldFileName
+				log("No '_Base' found in the filename.\n");
+				return iFail;
+			}
+			
+		}
+
+		if (use_new_logic) {
+			// Find the position of "_Base" in oldFileName
+			size_t dotPos = oldFileName.find_last_of('.');
+			if (dotPos != std::string::npos) {
+				std::string fileExtension = oldFileName.substr(dotPos);
+				newFileName = newFileName + fileExtension;
+			}
+			else {
+				return iFail;
+			}
+		}
+
+		if (!newFileName.empty()) {
+
+			log("New Named Reference Name will be %s\n", newFileName.c_str());
+
+			ITK_CHECK(AOM_refresh(file_tag, TRUE));
+			ITK_CHECK(IMF_set_original_file_name2(file_tag, newFileName.c_str()));
+			ITK_CHECK(AOM_save_without_extensions(file_tag));
+			ITK_CHECK(AOM_refresh(file_tag, FALSE));
+			ITK_CHECK(AOM_unlock(file_tag));
+		}
+	}
+	SAFE_SM_FREE(object_type);
+	SAFE_SM_FREE(dataset_obj_name);
+	SAFE_SM_FREE(reference_name);
+	SAFE_SM_FREE(namedRefName);
+	return iFail;
+}
+
+/*
+* Get last Named Reference File and set NewItemID to the Dataset.
+*/
+int rename_PCA_Variant_named_reference(tag_t dataset_tag, string NewItemID)
+{
+	int iFail = ITK_ok,
+		ii = 0,
+		reference_count = 0;
+	AE_reference_type_t reference_type;
+	tag_t file_tag = NULLTAG;
+	char* object_type = NULL;
+	char* reference_name = NULL;
+	char* namedRefName = NULL;
+	tag_t reference_object;
+
+	log("Entered (rename_PCA_Variant_named_reference) method");
+
+	ITK_CHECK(WSOM_ask_object_type2(dataset_tag, &object_type));
+
+	if (IS_EMPTY_STRING(object_type)) {
+		return 0;
+	}
+
+	log("Dataset type is %s\n", object_type);
+
+	if (tc_strcasecmp("PDF", object_type) == 0) {
+		log("type is = PDF\n");
+		ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+		if (reference_count > 0)
+		{
+			for (ii = 0; ii < reference_count; ii++)
+			{
+				ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, ii, &reference_name, &reference_type, &reference_object));
+			}
+		}
+		else {
+			log("ref count is 0\n");
+		}
+		if (reference_name == NULL || IS_EMPTY_STRING(reference_name)) {
+			log("reference name is null\n");
+			return 0;
+		}
+		else {
+			log("reference name is not null\n");
+		}			
+
+		ITK_CHECK(AE_ask_dataset_named_ref2(dataset_tag, reference_name, &reference_type, &file_tag));
+		
+		if (file_tag != NULLTAG) {
+			log("file tag is not null\n");
+			ITK_CHECK(IMF_ask_original_file_name2(file_tag, &namedRefName));
+
+			if (IS_EMPTY_STRING(namedRefName))
+				return 0;
+
+			printf("\n Old Named Reference Name is: [%s] \n", namedRefName);
+
+			// Replace '/' with '_'
+			std::replace(NewItemID.begin(), NewItemID.end(), '/', '_');
+
+			// Merge with NewItemID while keeping "_Base"
+			std::string newFileName = NewItemID + ".pdf";
+
+			log("New Named Reference Name will be [%s]\n", newFileName.c_str());
+
+			ITK_CHECK(AOM_refresh(file_tag, TRUE));
+			ITK_CHECK(IMF_set_original_file_name2(file_tag, newFileName.c_str()));
+			ITK_CHECK(AOM_save_without_extensions(file_tag));
+			ITK_CHECK(AOM_refresh(file_tag, FALSE));
+			ITK_CHECK(AOM_unlock(file_tag));
+			SAFE_SM_FREE(namedRefName);
+		}
+		else {
+			log("file tag is null\n");
+		}
+		SAFE_SM_FREE(reference_name);
+	}
+
+	SAFE_SM_FREE(object_type);
+	log("Exiting (rename_PCA_Variant_named_reference) method");
+	
+	return iFail;
+}
+
+/*
+* When Revising Moog Part Revision it will Carry forward Derived Dataset from Previous revision (in IMAN_Specification)
+* Named References will have old File Names (Revision Names).
+* So these Datasets will be removed when Saving PCA Derived Dataset for new revision.
+* 
+* Traverse Dataset in Moog Part revision with IMAN_Specification Revision.
+* for each dataset get Primary Object with EDAHasDerived Dataset Relation, if Count 0 then Cut the Dataset.
+*/
+
+int remove_Dataset_relation(tag_t tMGPartObj) {
+	
+	log("Entered Function remove_Dataset_relation");
+	int iFail = ITK_ok;
+	tag_t tDDRelation = NULL;
+	tag_t tImanSpecRel = NULL;
+	tag_t tNewRelation = NULL;
+
+	int n_secondary_objects = 0, jSecObjCnt = 0;
+	tag_t* secondary_objects = NULL;
+	int nPrimaryObjCntPCA = 0;
+	tag_t* ptPrimaryObjsPCA = NULL;
+	char* object_type = NULL;
+
+	log("Entered Function remove_Dataset_relation\n");
+
+	ITK_CHECK(GRM_find_relation_type("IMAN_specification", &tImanSpecRel));
+	ITK_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tDDRelation));
+
+	ERROR_CHECK(GRM_list_secondary_objects_only(tMGPartObj, tImanSpecRel, &n_secondary_objects, &secondary_objects));
+
+	if (n_secondary_objects > 0)
+	{
+		for (jSecObjCnt = 0; jSecObjCnt < n_secondary_objects; jSecObjCnt++) {
+			if (secondary_objects[jSecObjCnt] != NULLTAG)
+			{
+				object_type = NULL;
+				ITK_CHECK(WSOM_ask_object_type2(secondary_objects[jSecObjCnt], &object_type));
+				log("Dataset type is %s for Dataset [%d]\n", object_type, jSecObjCnt);
+
+				if (tc_strcasecmp("PDF", object_type) == 0 || tc_strcasecmp("Zip", object_type) == 0) {
+					log("Dataset type is PDF or Zip\n");
+				}
+				else {
+					SAFE_SM_FREE(object_type);
+					continue;
+				}
+
+				nPrimaryObjCntPCA = 0;
+				ptPrimaryObjsPCA = NULL;
+				ITK_CHECK(GRM_list_primary_objects_only(secondary_objects[jSecObjCnt], tDDRelation, &nPrimaryObjCntPCA, &ptPrimaryObjsPCA));
+
+				if (nPrimaryObjCntPCA == 0) {
+					log("Primary PCA Count is 0, so removing Relation . \n");
+					tNewRelation = NULL;
+					ITK_CHECK(AOM_refresh(tMGPartObj, true));
+					ITK_CHECK(GRM_find_relation(tMGPartObj, secondary_objects[jSecObjCnt], tImanSpecRel, &tNewRelation));
+					//ITK_CHECK(GRM_create_relation(tTargetItem, tDerivedDataset, tDDRelation, NULLTAG, &tNewRelation));
+					if (tNewRelation != NULLTAG) {
+						ITK_CHECK(GRM_delete_relation(tNewRelation));
+						ITK_CHECK(AOM_save_without_extensions(tMGPartObj));
+					}
+
+					ITK_CHECK(AOM_refresh(tMGPartObj, false));
+				}
+				else {
+					log("Primary PCA Count is [%d] greater than 0. \n", nPrimaryObjCntPCA);
+				}
+				SAFE_SM_FREE(object_type);
+				SAFE_SM_FREE(ptPrimaryObjsPCA);
+			}
+		}
+	}
+	SAFE_SM_FREE(secondary_objects);
+	log("Completed Function remove_Dataset_relation");
+	return iFail;
+}
+/*
+* Copy Datasets from PCA variant to Schematic Revision
+* tTargetItem - Schematic Revision, tPCAVariantObj - PCA Variant Revision, tDerivedDataset - Derived Dataset
+* PCA Variant Dataset ID changed to Schematic Rev ID
+*/
+int Move_And_Rename_Dataset(tag_t tTargetItem, tag_t tPCAVariantObj, tag_t tDerivedDataset)
+{
+
+	log("Entered (Move_And_Rename_Dataset) Method..... \n");
+
+	int iFail = ITK_ok;
+	tag_t tDDRelation = NULL;
+	tag_t tNewRelation = NULL;
+
+	char* pcaVariantItemID = NULL;//MG1000010-0001EKIT
+	char* pcaVariantRevID = NULL;//01
+	char* schematicItemID = NULL;//ES1004085
+
+	//The Result String will be ES1004085-0001_01 and set to Dataset Name.
+
+	ITK_CHECK(AOM_ask_value_string(tPCAVariantObj, "item_id", &pcaVariantItemID));
+	ITK_CHECK(AOM_ask_value_string(tPCAVariantObj, "item_revision_id", &pcaVariantRevID));
+	ITK_CHECK(AOM_ask_value_string(tTargetItem, "item_id", &schematicItemID));
+
+	// Check if pcaVariantItemID contains '-'
+	char* hyphenPos = std::strchr(pcaVariantItemID, '-');
+
+	if (hyphenPos) {
+		// Split pcaVariantItemID using '-'
+		std::string firstPart(pcaVariantItemID, hyphenPos - pcaVariantItemID);
+		std::string secondPart(hyphenPos + 1);
+
+		// Construct the desired string - Format : ES1004085-0001_01
+		std::string result = schematicItemID;
+		result += '-';
+		result += secondPart.substr(0,4) + '_';
+		result += pcaVariantRevID;
+
+		log("New Named Reference Name will be passed as %s", result.c_str());
+
+		//Move and renaming Dataset
+		ITK_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tDDRelation));
+
+		ITK_CHECK(AOM_refresh(tTargetItem, true));
+		ITK_CHECK(GRM_create_relation(tTargetItem, tDerivedDataset, tDDRelation, NULLTAG, &tNewRelation));
+
+		ITK_CHECK(GRM_save_relation(tNewRelation));
+		ITK_CHECK(AOM_save_without_extensions(tTargetItem));
+		ITK_CHECK(AOM_refresh(tTargetItem, false));
+
+		char* finalAssyDrgNameItemID = NULL;
+
+		ITK_CHECK(AOM_ask_value_string(tTargetItem, "item_id", &finalAssyDrgNameItemID));
+		//string finalAssyDrgName = string(finalAssyDrgNameItemID);
+
+		log("\n+++Setting Dataset Name as :  [%s]", result.c_str());
+		ITK_CHECK(AOM_set_value_string(tDerivedDataset, "object_name", result.c_str()));
+		ITK_CHECK(AOM_save_with_extensions(tDerivedDataset));
+		ITK_CHECK(AOM_refresh(tDerivedDataset, false));
+
+		SAFE_SM_FREE(finalAssyDrgNameItemID);
+
+		//Change Named Reference Name
+		rename_PCA_Variant_named_reference(tDerivedDataset, result);
+
+	}
+	else {
+		std::cout << "pcaVariantItemID does not contain '-'" << std::endl;
+		return 0;
+	}
+
+	SAFE_SM_FREE(pcaVariantItemID);
+	SAFE_SM_FREE(pcaVariantRevID);
+	SAFE_SM_FREE(schematicItemID);
+	log("Exiting (Move_And_Rename_Dataset) Method..... \n");
+
+	return iFail;
+}
+
+int Move_Derived_Dataset(tag_t tTargetItem, tag_t tDerivedDataset, string sPostFix) {
+
+	log("\n+++Moog INFO: ENTERING Move_Derived_Dataset function. \n");
+
+	int iFail = ITK_ok;
+	tag_t tDDRelation = NULL;
+	tag_t tNewRelation = NULL;
+	std::string result;
+
+	ITK_CHECK(GRM_find_relation_type("IMAN_specification", &tDDRelation));
+
+	ITK_CHECK(AOM_refresh(tTargetItem, true));
+	ITK_CHECK(GRM_create_relation(tTargetItem, tDerivedDataset, tDDRelation, NULLTAG, &tNewRelation));
+
+	ITK_CHECK(GRM_save_relation(tNewRelation));
+	ITK_CHECK(AOM_save_with_extensions(tTargetItem));
+	ITK_CHECK(AOM_refresh(tTargetItem, false));
+
+	char* finalAssyDrgNameItemID = NULL;
+	char* MGPartRevID = NULL;
+
+	ITK_CHECK(AOM_ask_value_string(tTargetItem, "item_id", &finalAssyDrgNameItemID));
+	ITK_CHECK(AOM_ask_value_string(tTargetItem, "item_revision_id", &MGPartRevID));
+
+	string MGPartItemID = string(finalAssyDrgNameItemID);
+	size_t hypenPos = MGPartItemID.find("-");
+
+	if (hypenPos != std::string::npos) {
+		string firstpart = MGPartItemID.substr(0, hypenPos);
+		MGPartItemID = firstpart;
+	}
+
+	result = MGPartItemID + "_" + MGPartRevID;
+
+	string finalAssyDrgName = result + sPostFix;
+
+	log("\n+++Moog INFO: MOVING DD NAME :  [%s]", finalAssyDrgName.c_str());
+	ITK_CHECK(AOM_set_value_string(tDerivedDataset, "object_name", finalAssyDrgName.c_str()));
+	ITK_CHECK(AOM_save_with_extensions(tDerivedDataset));
+	ITK_CHECK(AOM_refresh(tDerivedDataset, false));
+
+	SAFE_SM_FREE(finalAssyDrgNameItemID);
+
+	log("\n+++Moog INFO: EXISTING Move_Derived_Dataset function.\n");
+
+	return iFail;
+}
+/*
+* This is a post action method for EDA Datasets name change from OOTB to Custom. ADO ref:303313
+*/
+int postAction_DatasetNameChange(METHOD_message_t* msg, va_list args)
+{
+	int ifail = ITK_ok,
+		reference_count = 0,
+		ii = 0,
+		iFail = ITK_ok;
+
+	char* object_type = NULL;
+	bool DatasetCondition = false;
+	char* dataset_name = NULL;
+
+	try { //try
+		log("(postAction_DatasetNameChange) Pre-Validate PDF datasets and check if it is for EDA..... \n");
+		/* va_list for AE_import_file_msg */
+		va_list largs;
+		va_copy(largs, args);
+		//get tag, name and type
+		tag_t  dataset_tag = va_arg(largs, tag_t);
+		char* reference_name = va_arg(largs, char*);
+		AE_reference_type_t  reference_type = va_arg(largs, AE_reference_type_t);
+
+		char* full_os_path = va_arg(largs, char*);
+		char* file_name = va_arg(largs, char*);
+		int fileTypeFlag = va_arg(largs, int);
+		va_end(largs);
+
+		//Check for data validation and EDA type and return 
+		if (dataset_tag == NULLTAG) {
+			log("(postAction_DatasetNameChange) dataset_tag is null, so returning..... \n");
+			return 0;
+		}
+
+		//get the name and check if it is EDA 
+		ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+
+		if (IS_EMPTY_STRING(dataset_name)) {
+			log("(postAction_DatasetNameChange) dataset_name is empty, so returning..... \n");
+			return 0;
+		}
+		if (isValidDatasetName_Schematic(dataset_name)) {
+			checkAndRenameSchDataset(dataset_tag);
+			renamePCAVariantDataset(dataset_tag);
+		}
+		else if (isValidDatasetName_SchematicWithRev(dataset_name)) {
+			renamePCAVariantDataset(dataset_tag);
+		}
+		else if (isValidDatasetName_PCAVariant(dataset_name)) {
+			if (IS_EMPTY_STRING(full_os_path)) {
+				log("full_os_path is %s\n", full_os_path);
+			}
+			if (IS_EMPTY_STRING(file_name)) {
+				log("file_name is %s\n", file_name);
+			}
+			log("(postAction_DatasetNameChange) Pre-Validation SUCCESS, Proceeding for EDA Datasets Named Reference File changes.....Calling method renamePCAVariantDataset \n");
+			renamePCAVariantDataset(dataset_tag);
+			log("(postAction_DatasetNameChange) Execution SUCCESS, Completed for EDA Datasets Named Reference File changes..... \n");
+		}
+		else if (strncmp(dataset_name, "MG", strlen("MG")) != 0) {
+			log("(postAction_DatasetNameChange) dataset_name not EDA Related,,(MG), so returning..... \n");
+			return 0;
+		}
+
+		else {
+			//calling the funtion
+			log("(postAction_DatasetNameChange) Pre-Validation SUCCESS, Proceeding for EDA Datasets Named Reference File changes..... \n");
+			getDatasetDetails(dataset_tag);
+			log("(postAction_DatasetNameChange) Execution SUCCESS, Completed for EDA Datasets Named Reference File changes..... \n");
+		}
+
+	}//try
+
+	catch (IFail& ex)
+	{
+		log("(postAction_DatasetNameChange) Exception Occured...Details below ");
+		log("(postAction_DatasetNameChange),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+	return ITK_ok;
+}//postAction_DatasetNameChange
+
+/*
+* If Named Reference COunt is greater than 1 then remove first Names Reference.
+* get Named Ref Count and Traverse one by one, store the Last Named Reference in a Variable(latest_ref_object).
+* If Named Reference count is greater than 1, then Remove first Named Reference.
+* and Add the Named Reverence Stored in Variable(latest_ref_object)
+*/
+int remove_first_named_ref(tag_t dataset_tag) {
+	int iFail = ITK_ok,
+		reference_count = 0,
+		ii = 0,
+		j = 0;
+	AE_reference_type_t reference_type;
+	char* object_type = NULL;
+	char* dataset_name = NULL;
+	char* reference_name = NULL;
+	tag_t reference_object;
+	tag_t latest_ref_object = NULLTAG;
+	tag_t file_tag = NULLTAG;
+	char* namedRefName = NULL;
+
+	log("\n Entered method remove_first_named_ref\n");
+	ITK_CHECK(WSOM_ask_object_type2(dataset_tag, &object_type));
+	log("Dataset type is %s\n", object_type);
+
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+	log("Dataset name is %s\n", dataset_name);
+
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//print the datasets and its named references.
+	ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+	log("####----Dataset Named Ref count before remove is %d\n", reference_count);
+	for (int j = 0; j < reference_count; j++) {
+		//get the nmed reference
+		ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, j, &reference_name, &reference_type, &reference_object));
+
+		//Just incase take the last named reference and store the reference as latest refer TAGLATESTKEEP
+		if (j == (reference_count - 1)) {
+			latest_ref_object = reference_object;
+		}
+		//get the file name
+		ITK_CHECK(IMF_ask_original_file_name2(reference_object, &namedRefName));
+		log("\n ALL DETAILS PRINT------> [%d] [%d] [%s] [%d] [%s] [%d]  \n", j, dataset_tag, reference_name, reference_object, namedRefName, latest_ref_object);
+
+	}//for 
+	//Now actual remove the first named reference
+
+	if (reference_count > 1) {
+		log("####----Dataset Named Ref count is > 0, so 1st Named Ref will be removed\n");
+		for (int j = 0; j <= 0; j++) {
+			//get the nmed reference
+			ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, j, &reference_name, &reference_type, &reference_object));
+			//get the file name
+			ITK_CHECK(IMF_ask_original_file_name2(reference_object, &namedRefName));
+			//log("\n ALL DETAILS REMOVE XXXXXX > [%d] [%d] [%s] [%d] [%s] \n", j, dataset_tag, reference_name, reference_object, namedRefName);
+			log("\n ALL DETAILS REMOVE------> [%d] [%d] [%s] [%d] [%s] [%d]  \n", j, dataset_tag, reference_name, reference_object, namedRefName, latest_ref_object);
+
+			//ITK_CHECK(AOM_unlock(dataset_tag));
+			ITK_CHECK(AOM_refresh(dataset_tag, TRUE));
+			ITK_CHECK(AE_remove_dataset_named_ref_by_tag2(dataset_tag, reference_name, reference_object));
+			ITK_CHECK(AE_save_myself(dataset_tag));
+			ITK_CHECK(AOM_unlock(dataset_tag));
+
+			log("TAGLETSKEEP--->Attaching last Named Reference\n");
+			//TAGLATESTKEEP
+			ITK_CHECK(AOM_refresh(dataset_tag, TRUE));
+			ITK_CHECK(
+_named_ref2(dataset_tag, reference_name, AE_reference_type_t::AE_ASSOCIATION, latest_ref_object));
+			ITK_CHECK(AOM_save_without_extensions(dataset_tag));
+			ITK_CHECK(AOM_unlock(dataset_tag));
+
+		}//for
+	}
+	//reprint
+	ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+	log("####----Dataset Named Ref count after remove is %d\n", reference_count);
+	for (int j = 0; j < reference_count; j++) {
+		//get the nmed reference
+		ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, j, &reference_name, &reference_type, &reference_object));
+		//get the file name
+		ITK_CHECK(IMF_ask_original_file_name2(reference_object, &namedRefName));
+		//log("\n ALL DETAILS PRINT------> [%d] [%d] [%s] [%d] [%s] \n", j, dataset_tag, reference_name, reference_object, namedRefName);
+		log("\n ALL DETAILS PRINT------> [%d] [%d] [%s] [%d] [%s] [%d]  \n", j, dataset_tag, reference_name, reference_object, namedRefName, latest_ref_object);
+
+	}//for 
+	//if (true) { return 0; }
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	SAFE_SM_FREE(object_type);
+	SAFE_SM_FREE(dataset_name);
+	SAFE_SM_FREE(reference_name);
+	SAFE_SM_FREE(namedRefName);
+
+	log("\n Exiting method remove_first_named_ref\n");
+	return iFail;
+}
+/*
+* Change Core Schematic Dataset Name
+* From Dataset Get Primary Object and set Schematic ID to Dataset.
+*/
+int checkAndRenameSchDataset(tag_t dataset_tag) {
+	int iFail = ITK_ok;
+	int nPrimaryObjCntSch = 0;
+	int reference_count = 0;
+
+	tag_t tHasDerivedDatasetRel = NULLTAG;
+	tag_t* ptPrimaryObjsSch = NULL;
+
+	char* object_type = NULL;
+	char* schematicRevID = NULL;
+	char* dataset_name = NULL;
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+
+	ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+	log("####----Dataset Named Ref count -- before renaming dataset [%s] checkAndRenameSchDataset -- is %d\n", dataset_name, reference_count);
+
+	if (!isValidDatasetName_SchematicWithRev(dataset_name)) {
+		ITK_CHECK(GRM_find_relation_type("EDAHasDerivedDataset", &tHasDerivedDatasetRel));
+		ITK_CHECK(GRM_list_primary_objects_only(dataset_tag, tHasDerivedDatasetRel, &nPrimaryObjCntSch, &ptPrimaryObjsSch));
+
+		if (nPrimaryObjCntSch > 0) {
+			ITK_CHECK(WSOM_ask_object_type2(ptPrimaryObjsSch[0], &object_type));
+
+			if (tc_strcmp(object_type, "E7_SchematicRevision") == 0) {
+
+				ITK_CHECK(AOM_ask_value_string(ptPrimaryObjsSch[0], "item_revision_id", &schematicRevID));
+				
+				std::string result = dataset_name;
+				result += '_';
+				result += schematicRevID;
+				
+				//ITK_CHECK(AOM_refresh(dataset_tag, true));
+				ITK_CHECK(AOM_set_value_string(dataset_tag, "object_name", result.c_str()));
+				ITK_CHECK(AOM_save_without_extensions(dataset_tag));
+				ITK_CHECK(AOM_refresh(dataset_tag, false));
+			}
+		}
+	}
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+
+	ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+	log("####----Dataset Named Ref count -- after renaming dataset [%s] checkAndRenameSchDataset -- is %d\n", dataset_name, reference_count);
+	SAFE_SM_FREE(dataset_name);
+	SAFE_SM_FREE(schematicRevID);
+	SAFE_SM_FREE(ptPrimaryObjsSch);
+	SAFE_SM_FREE(object_type);
+
+	return iFail;
+}
+
+/*
+* Remove If multiple Named Reference available
+* get Dataset Name and Set it to Named Reference Name
+*/
+int renamePCAVariantDataset(tag_t dataset_tag) {
+
+	int iFail = ITK_ok,
+		reference_count = 0,
+		ii = 0,
+		j = 0;
+	AE_reference_type_t reference_type;
+	char* object_type = NULL;
+	char* dataset_name = NULL;
+	char* reference_name = NULL;
+	tag_t reference_object;
+	tag_t latest_ref_object = NULLTAG;
+	tag_t file_tag = NULLTAG;
+	char* namedRefName = NULL;
+
+	log("\n Entered method renamePCAVariantDataset\n");
+	ITK_CHECK(WSOM_ask_object_type2(dataset_tag, &object_type));
+	log("Dataset type is %s\n", object_type);
+
+	ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+	log("Dataset name is %s\n", dataset_name);
+
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//print the datasets and its named references.
+	ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+	log("####----Dataset Named Ref count before remove is %d\n", reference_count);
+
+	iFail = remove_first_named_ref(dataset_tag);
+
+	if (tc_strcasecmp("PDF", object_type) == 0) {
+
+		ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+		log("Dataset Named Ref count is %d\n", reference_count);
+
+		//if (reference_count == 1)
+		if (reference_count > 0)
+		{
+			if (reference_count > 0)
+			{
+				for (ii = 0; ii < reference_count; ii++)
+				{
+					ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, ii, &reference_name, &reference_type, &reference_object));
+				}
+			}
+			if (reference_name == NULL || IS_EMPTY_STRING(reference_name))
+				return 0;
+
+			log("Dataset Named Ref Name found is %s\n", reference_name);
+
+			ITK_CHECK(AE_ask_dataset_named_ref2(dataset_tag, reference_name, &reference_type, &file_tag));
+
+			ITK_CHECK(IMF_ask_original_file_name2(file_tag, &namedRefName));
+
+			if (IS_EMPTY_STRING(namedRefName))
+				return 0;
+
+			log("\n Old Named Reference Name: %s \n", namedRefName);
+
+			std::string newFileName = string(dataset_name) + ".pdf";
+
+			log("\n New Named Reference Name: %s \n", newFileName);
+
+			log("Started renaming Named Reference for PCA Variant");
+
+			ITK_CHECK(AOM_refresh(file_tag, TRUE));
+			ITK_CHECK(IMF_set_original_file_name2(file_tag, newFileName.c_str()));
+			ITK_CHECK(AOM_save_without_extensions(file_tag));
+			ITK_CHECK(AOM_refresh(file_tag, FALSE));
+			ITK_CHECK(AOM_unlock(file_tag));
+			log("Completed renaming Named Reference for PCA Variant");
+
+			SAFE_SM_FREE(reference_name);
+			SAFE_SM_FREE(namedRefName);
+		}
+				
+		//set_dataset_named_reference_name(dataset_tag, string(dataset_name));
+	}
+
+	SAFE_SM_FREE(object_type);
+	SAFE_SM_FREE(dataset_name);
+
+	log("\n Exiting method renamePCAVariantDataset\n");
+
+	return iFail;
+}
+
+int getDatasetDetails(tag_t dataset_tag) {
+
+	try
+	{
+		int iFail = ITK_ok,
+			reference_count = 0,
+			ii = 0;
+		AE_reference_type_t reference_type;
+		char* object_type = NULL;
+		char* dataset_name = NULL;
+		char* reference_name = NULL;
+		char* namedRefName = NULL;
+		bool DatasetCondition = false;
+		tag_t reference_object;
+		tag_t file_tag = NULLTAG;
+
+		ITK_CHECK(WSOM_ask_object_type2(dataset_tag, &object_type));
+		log("Dataset type is %s\n", object_type);
+
+		ITK_CHECK(AOM_ask_value_string(dataset_tag, "object_name", &dataset_name));
+		log("Dataset name is %s\n", dataset_name);
+
+		string dsetName = dataset_name;
+
+		if (dsetName.find("_assy_drg") != std::string::npos || dsetName.find("_assySupport") != std::string::npos || dsetName.find("_gerber_drg") != std::string::npos || dsetName.find("_gerber") != std::string::npos || dsetName.find("_master_drg") != std::string::npos || dsetName.find("_mp_drg") != std::string::npos || dsetName.find("_Assy") != std::string::npos || dsetName.find("_Manuf") != std::string::npos || dsetName.find("_Gerber") != std::string::npos || dsetName.find("_MD") != std::string::npos || dsetName.find("_MP") != std::string::npos)
+		{
+
+		}
+		else {
+			return 0;
+		}
+
+		log("Dataset name is %s procedding after name condition validation\n", dataset_name);
+
+		if (tc_strcasecmp("PDF", object_type) == 0 || tc_strcasecmp("Zip", object_type) == 0) {
+
+			ITK_CHECK(AE_ask_dataset_ref_count(dataset_tag, &reference_count));
+			log("Dataset Named Ref count is %d\n", reference_count);
+
+			if (reference_count > 0)
+			{
+				ITK_CHECK(AE_find_dataset_named_ref2(dataset_tag, 0, &reference_name, &reference_type, &reference_object));
+			}
+			if (reference_name == NULL) {
+				log("named Ref name is NULL");
+				return 0;
+			}
+
+			log("Dataset Named Ref Name found is %s\n", reference_name);
+			set_dataset_named_reference_name(dataset_tag, string(dataset_name));
+		}
+
+		SAFE_SM_FREE(object_type);
+		SAFE_SM_FREE(dataset_name);
+		SAFE_SM_FREE(reference_name);
+	}
+	catch (IFail& ex)
+	{
+		cout << "Exception Trace " << ex.ifail() << endl;
+		cout << ex.getMessage() << endl;
+	}
+	return 0;
+}
+
+static int ask_instance_lock(tag_t instance)
+{
+	int ifail = ITK_ok;
+	//ResultStatus rstat;
+
+	int lock_token = POM_no_lock;
+	try
+	{
+		ifail = POM_ask_instance_lock(instance, &lock_token);
+		log("Schematic Save Lock status    POM_ask_instance_lock -");
+		if (ifail == 515111)
+		{
+			log("Schematic Save Lock status POM_inst_not_loaded  \n");
+		}
+
+		if (ifail == 515115)
+		{
+			log("Schematic Save Lock status POM_inst_newly_created  \n");
+		}
+
+		if (ifail == ITK_ok)
+		{
+			switch (lock_token)
+			{
+			case POM_no_lock:
+				log("Schematic Save Lock status POM_no_lock\n");
+				break;
+			case POM_read_lock:
+				log("Schematic Save Lock status POM_read_lock\n");
+				break;
+			case POM_modify_lock:
+				log("Schematic Save Lock status POM_modify_lock\n");
+				break;
+			case POM_delete_lock:
+				log("Schematic Save Lock status POM_delete_lock\n");
+				break;
+			}
+		}
+	}
+	catch (const IFail& e)
+	{
+		cout << endl << endl;
+		cout << "error " << e.ifail() << endl;
+		cout << e.getMessage() << endl;
+	}
+	return lock_token;
+}
+
+//for Title Block Changes.
+extern DLLAPI int postAction_EDA_SchematicRevision_Save(METHOD_message_t* msg, va_list args)
+{
+	int iFail = ITK_ok;
+	char* object_type = NULL;
+	char* TableBlockParent = NULL;
+	char* IPStatement = NULL;
+	char* tradeJurd = NULL;
+
+	std::string strTB4;
+
+	int chunkSize = 25;
+	int ipStmtSize = 125;
+	int tradeJurdSize = 125;
+	try { //try
+		log("(postAction_EDA_SchematicRevision_Save) Pre-Validate Item Revision and check if it is for EDA..... \n");
+		//calling the funtion
+		va_list largs;
+		va_copy(largs, args);
+
+		tag_t rev = va_arg(largs, tag_t);
+		logical  isNew = va_arg(largs, logical);
+
+		va_end(largs);
+
+		if (isNew) {
+			log("Schematic Revision Save - isNew is true\n");
+			//return 0;
+		}
+		else {
+			log("Schematic Revision Save - isNew is false\n");
+		}
+
+		int lock_token = POM_no_lock;
+		logical islockneeded = false;
+		ERROR_CHECK(POM_ask_instance_lock(rev, &lock_token));
+
+		if (lock_token == POM_modify_lock) {
+			log("Schematic Revision Save - Modify Lock is true\n");
+			islockneeded = true;
+		}
+
+		ask_instance_lock(rev);
+		tag_t* release_statuses = NULL;
+		int release_status_count = 0;
+		if (rev == NULLTAG) {
+			log("(postAction_EDA_SchematicRevision_Save) rev is null, so returning..... \n");
+			return 0;
+		}
+
+		ITK_CHECK(WSOM_ask_release_status_list(rev, &release_status_count, &release_statuses));
+
+		SAFE_SM_FREE(release_statuses);
+
+		if (release_status_count > 0)
+		{
+			log("Schematic Revision Save - Release Status Count is > 0.\n");
+		}
+		else {
+			log("Schematic Revision Save - Release Status Count is = 0.\n");
+		}
+		ITK_CHECK(WSOM_ask_object_type2(rev, &object_type));
+
+		if (IS_EMPTY_STRING(object_type)) {
+			log("(postAction_DatasetNameChange) object_type is empty, so returning..... \n");
+			return 0;
+		}
+
+		log("Object type is %s\n", object_type);
+
+		if (tc_strcmp(object_type, "E7_SchematicRevision") != 0) {
+			log("(postAction_EDA_SchematicRevision_Save) object_type not EDA Related,,(E7_SchematicRevision), so returning..... \n");
+		}
+		else {
+			log("(postAction_EDA_SchematicRevision_Save) Pre-Validation SUCCESS, Proceeding for EDA Schematic Title block and IP Statement changes..... \n");
+			//change to ITK_CHECK
+			ITK_CHECK(AOM_ask_value_string(rev, "object_name", &TableBlockParent));//Check the real Name.
+			if (!IS_EMPTY_STRING(TableBlockParent)) {
+				log("TableBlockParent is %s\n", TableBlockParent);
+				std::vector<std::string> childStrings = splitString(TableBlockParent, chunkSize);
+				log("TableBlockParent split is completed..\n");
+				if (childStrings.size() > 0) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB1", childStrings[0]));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB2", ""));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB3", ""));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB4", ""));
+				}
+				if (childStrings.size() > 1) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB2", childStrings[1]));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB3", ""));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB4", ""));
+				}
+				if (childStrings.size() > 2) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB3", childStrings[2]));
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB4", ""));
+				}
+				if (childStrings.size() > 3) {
+					strTB4 = childStrings[3];
+					if (childStrings.size() > 4) {
+						for (size_t i = 4; i < childStrings.size(); ++i) {
+							std::string childString = childStrings[i];
+							strTB4 = strTB4 + childString;
+						}
+					}
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TB4", strTB4));
+				}
+			}
+			else {
+				log("(postAction_EDA_SchematicRevision_Save) object_name Value is Empty..... \n");
+			}
+
+			ITK_CHECK(AOM_ask_value_string(rev, "ent4_moog_IP_statement", &IPStatement));//Check the real Name.
+
+			if (!IS_EMPTY_STRING(IPStatement)) {
+				log("IP Statement is %s\n", IPStatement);
+				std::string delimiter = "CONFIDENTIAL INFORMATION";
+				std::string IPUpperCase = toUppercase(IPStatement);
+				log("UpperCase IP Statement is %s\n", IPUpperCase.c_str());
+
+				std::vector<std::string> splitStrUsingINC = splitStringDelimiter(IPUpperCase, delimiter);
+
+				log("UpperCase IP Statement split Size is %d\n", splitStrUsingINC.size());
+
+				if (splitStrUsingINC.size() >= 2) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_IP1", splitStrUsingINC[0]));
+
+
+					std::vector<std::string> childStrings = splitString(splitStrUsingINC[1], ipStmtSize);
+					log("IP Statement split is completed..\n");
+					if (childStrings.size() > 0) {
+						ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_IP2", childStrings[0]));
+					}
+					if (childStrings.size() > 1) {
+						ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_IP3", childStrings[1]));
+					}
+					if (childStrings.size() > 2) {
+						ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_IP4", childStrings[2]));
+					}
+					if (childStrings.size() > 3) {
+						ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_IP5", childStrings[3]));
+					}
+					if (childStrings.size() > 4) {
+						std::string strIPStmt = childStrings[4];
+						if (childStrings.size() > 5) {
+							for (size_t i = 5; i < childStrings.size(); ++i) {
+								std::string childString = childStrings[i];
+								strIPStmt = strIPStmt + childString;
+							}
+						}
+						ERROR_CHECK(setPropertyValueFromChar(rev, "e7_eda_sch_TBP", strIPStmt));
+					}
+				}
+			}
+			else {
+				log("(postAction_EDA_SchematicRevision_Save) ent4_moog_IP_statement Value is Empty..... \n");
+			}
+
+			ITK_CHECK(AOM_ask_value_string(rev, "ent4_trd_jurisdiction_stmt", &tradeJurd));//Check the real Name.
+
+			if (!IS_EMPTY_STRING(tradeJurd)) {
+				log("Trade Jurisdiction Statement is %s\n", tradeJurd);
+
+				std::string tradeJurdUpper = toUppercase(tradeJurd);
+				log("UpperCase Trade Jurisdiction Statement is %s\n", tradeJurd);
+
+				std::vector<std::string> childStrings = splitString(tradeJurdUpper, tradeJurdSize);
+				log("Trade Jurisdiction Statement split is completed..\n");
+				if (childStrings.size() > 0) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_Trade_Jur1", childStrings[0]));
+				}
+				if (childStrings.size() > 1) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_Trade_Jur2", childStrings[1]));
+				}
+				if (childStrings.size() > 2) {
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_Trade_Jur3", childStrings[2]));
+				}
+				if (childStrings.size() > 3) {
+					std::string strTradeJurd = childStrings[3];
+					if (childStrings.size() > 4) {
+						for (size_t i = 4; i < childStrings.size(); ++i) {
+							std::string childString = childStrings[i];
+							strTradeJurd = strTradeJurd + childString;
+						}
+					}
+					ERROR_CHECK(setPropertyValueFromChar(rev, "e7_Schematic_Trade_Jur4", strTradeJurd));
+				}
+			}
+			else {
+				log("(postAction_EDA_SchematicRevision_Save) ent4_trd_jurisdiction_stmt Value is Empty..... \n");
+			}
+			ask_instance_lock(rev);
+
+			ERROR_CHECK(POM_ask_instance_lock(rev, &lock_token));
+
+			if (islockneeded == true && lock_token != POM_modify_lock) {
+				log("Schematic Revision Save - Modify Lock to true\n");
+				ERROR_CHECK(AOM_refresh(rev, TRUE));
+			}
+
+			log("(postAction_EDA_SchematicRevision_Save) Execution SUCCESS, Completed for EDA Schematic Title block and IP Statement changes..... \n");
+		}		
+	}//try
+	catch (IFail& ex)
+	{
+		log("(postAction_EDA_SchematicRevision_Save) Exception Occured...Details below ");
+		log("(postAction_EDA_SchematicRevision_Save),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+
+	return iFail;
+}
+
+std::vector<std::string> splitStringDelimiter(const std::string& input, const std::string& delimiter) {
+	std::vector<std::string> tokens;
+	size_t foundPos = input.find(delimiter);
+
+	if (foundPos != std::string::npos) {
+		std::string firstToken = input.substr(0, foundPos + delimiter.length());
+		std::string secondToken = input.substr(foundPos + delimiter.length());
+		tokens.push_back(firstToken);
+		tokens.push_back(secondToken);
+	}
+
+	return tokens;
+}
+
+std::string toUppercase(const std::string& str) {
+	std::string result = str;
+	std::transform(result.begin(), result.end(), result.begin(), [](unsigned char c) {
+		return std::toupper(c);
+		});
+	return result;
+}
+
+std::vector<std::string> splitString(const std::string& parentString, int chunkSize) {
+	std::istringstream iss(parentString);
+	std::vector<std::string> words;
+	std::string word;
+	while (iss >> word) {
+		words.push_back(word);
+	}
+
+	std::vector<std::string> childStrings;
+	std::string currentString;
+
+	for (const auto& word : words) {
+		if (currentString.length() + word.length() <= chunkSize) {
+			currentString += word + " ";
+		}
+		else {
+			childStrings.push_back(currentString);
+			currentString = word + " ";
+		}
+	}
+
+	if (!currentString.empty()) {
+		childStrings.push_back(currentString);
+	}
+
+	// Check if there are remaining words
+	if (childStrings.size() >= 4) {
+		std::string lastChildString = childStrings.back();
+		childStrings.pop_back();
+
+		while (childStrings.size() < 3) {
+			lastChildString += " " + childStrings.back();
+			childStrings.pop_back();
+		}
+
+		childStrings.push_back(lastChildString);
+	}
+
+	return childStrings;
+}
+
+vector<string> split(const string& str, const string& delim)
+{
+	vector<string> tokens;
+	size_t prev = 0, pos = 0;
+	do
+	{
+		pos = str.find(delim, prev);
+		if (pos == string::npos) pos = str.length();
+		string token = str.substr(prev, pos - prev);
+		if (!token.empty()) tokens.push_back(token);
+		prev = pos + delim.length();
+	} while (pos < str.length() && prev < str.length());
+	return tokens;
+}
+
+
+static int report_error(const char* file, int line, const char* call, int status, logical exit_on_error)
+{
+	if (status != ITK_ok) {
+		int n_errors = 0;
+		const int
+			* severities = NULL,
+			* statuses = NULL;
+		const char** messages = NULL;
+
+		EMH_ask_errors(&n_errors, &severities, &statuses, &messages);
+		if (n_errors > 0)
+		{
+			log("\n%s\n", messages[n_errors - 1]);
+			EMH_clear_errors();
+		}
+		else
+		{
+			///char *error_message_string;   
+			//EMH_get_error_string(NULLTAG, status, &error_message_string);        
+			//log("\n%s\n", error_message_string);     
+		}
+
+		log("Exception %d at line %d in %s\n", status, line, file);
+		log("%s\n", call);
+
+		if (exit_on_error) {
+			log("Exiting program!\n");
+			//exit(status);         
+			exit(status);
+		}
+	}
+	return status;
+}
+
+static void log(const char* format, ...) {
+	try {
+		char msg[2000] = "Moog EDAGatewayExtension DLL-->";
+		va_list args;
+		va_start(args, format);
+		vsprintf(msg, format, args);
+		va_end(args);
+
+		const char* prefix = "\nMoog EDAGatewayExtension DLL --> ";
+		size_t newLength = strlen(msg) + strlen(prefix) + 1;
+		char* prefixmsg = new char[newLength];
+		strcpy(prefixmsg, prefix);
+		strcat(prefixmsg, msg);
+
+		printf(prefixmsg);
+		TC_write_syslog(prefixmsg);
+	}
+	catch (IFail& ex)
+	{
+		log("(postAction_DatasetNameChange) Exception Occured...Details below ");
+		log("(postAction_DatasetNameChange),is [%d][%s]\n", ex.ifail(), ex.getMessage());
+	}
+}

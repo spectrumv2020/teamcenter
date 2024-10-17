@@ -1,0 +1,88 @@
+@echo off
+Setlocal
+
+Title CIS_Automation_Scheduler
+
+rem set the Folder Paths in below:
+set CISHomePath=D:\Apps\CIS_Update\FileInput
+set staging_dir=D:\Apps\CIS_Update\Staging
+set Processed_dir=D:\Apps\CIS_Update\Processed
+
+set input_dir=%CISHomePath%\Input
+set "test_batch_file=%cd%\runCISUpdate_ActualRun.bat"
+
+rem Check if staging_dir, input_dir, and Processed_dir exist
+if not exist "%staging_dir%\" (
+    echo Error: Staging directory does not exist.
+	cscript MessageBox.vbs "Error: Staging directory does not exist."
+    rem pause
+    exit /b 1
+)
+
+if not exist "%input_dir%\" (
+    echo Error: Input directory does not exist.
+	cscript MessageBox.vbs "Error: Input directory does not exist."
+    rem pause
+    exit /b 1
+)
+
+if not exist "%Processed_dir%\" (
+    echo Error: Processed directory does not exist.
+	cscript MessageBox.vbs "Error: Processed directory does not exist."
+    rem pause
+    exit /b 1
+)
+
+:mainLoop
+rem echo %staging_dir%
+echo "CIS Automation Scheduler is looking for input files...Polling for every 5 seconds..."
+
+rem Check if there are files in the staging directory
+For /F %%A in ('dir /b /a %staging_dir%') Do (
+    Echo The folder is NOT empty
+    goto :ok
+)
+timeout /t 5 > nul
+goto :mainLoop
+Echo The folder is empty
+:ok
+
+rem Move the file from staging to input directory
+for %%F in ("%staging_dir%\*") do (
+    echo Moving "%%~nxF" to input directory.
+    move "%%F" "%input_dir%\" > nul
+)
+rem pause
+
+rem Check if there is a file in the input directory
+dir /b "%input_dir%\*" > nul 2>&1
+if %errorlevel% equ 1 (
+    echo No files found in the input directory.
+    goto skipTestBatch
+)
+
+rem Run the test batch file
+echo Running test batch file...
+call "%test_batch_file%"
+
+rem Move the file from input to Processed directory with date and time appended
+for %%F in ("%input_dir%\*") do (
+    echo Moving "%%~nxF" to Processed directory.
+    setlocal enabledelayedexpansion
+    set "datetime=!date:/=-!_!time::=-!"
+    set "filename=%%~nF"
+    set "extension=%%~xF"
+    move "%%F" "%Processed_dir%\!filename!_!datetime!!extension!" > nul
+    endlocal
+)
+
+:skipTestBatch
+goto mainLoop
+
+rem Move the file from input to Processed directory
+for %%F in ("%input_dir%\*") do (
+    echo Moving "%%~nxF" to Processed directory.
+    move "%%F" "%Processed_dir%\" > nul
+)
+
+
