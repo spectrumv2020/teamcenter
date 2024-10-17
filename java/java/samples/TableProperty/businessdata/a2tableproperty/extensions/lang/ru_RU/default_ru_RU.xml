@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItemMasterS" status="Approved">Мастер-форма хранения пользовательского элемента</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItemMaster" status="Approved">Мастер-форма пользовательского элемента</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItemRevMasterS" status="Approved">Мастер-форма хранения ревизии пользовательского элемента</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItemRevisionMaster" status="Approved">Мастер-форма ревизии пользовательского элемента</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItemRevision" status="Approved">Ревизия пользовательского элемента</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2CustomItem" status="Approved">Пользовательский элемент</key>
+   <key locale="ru_RU" id="BusinessObject{::}A2SpecificationsBO" status="Approved">Бизнес-объект структур</key>
+   <key locale="ru_RU" id="Property{::}A2CustomItem{::}a2SpecProp" status="Approved">Структуры</key>
+   <key locale="ru_RU" id="Property{::}A2SpecificationsBO{::}a2Color" status="Approved">Цвет</key>
+   <key locale="ru_RU" id="Property{::}A2SpecificationsBO{::}a2Model" status="Approved">Модель</key>
+   <key locale="ru_RU" id="Property{::}A2SpecificationsBO{::}a2Year" status="Approved">Год</key>
+</Add>
+</TcBusinessDataLocalization>

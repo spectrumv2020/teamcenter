@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItemMasterS" status="Approved">自訂項目主屬性表儲存</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItemMaster" status="Approved">自訂項目主屬性表</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItemRevMasterS" status="Approved">自訂項目版本主屬性表儲存</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItemRevisionMaster" status="Approved">自訂項目版本主屬性表</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItemRevision" status="Approved">自訂項目版本</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2CustomItem" status="Approved">自訂項目</key>
+   <key locale="zh_TW" id="BusinessObject{::}A2SpecificationsBO" status="Approved">規範 BO</key>
+   <key locale="zh_TW" id="Property{::}A2CustomItem{::}a2SpecProp" status="Approved">規範</key>
+   <key locale="zh_TW" id="Property{::}A2SpecificationsBO{::}a2Color" status="Approved">顏色</key>
+   <key locale="zh_TW" id="Property{::}A2SpecificationsBO{::}a2Model" status="Approved">模型</key>
+   <key locale="zh_TW" id="Property{::}A2SpecificationsBO{::}a2Year" status="Approved">年份</key>
+</Add>
+</TcBusinessDataLocalization>

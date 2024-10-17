@@ -1,0 +1,116 @@
+<project name="SOA Sample Client" default="All" basedir=".">
+  <description>
+     Build file to build SOA Tests.
+  </description>
+    
+    <echo message=" ===========================================================" />
+    <echo message=" ================== SOA VendorManagement ===================" />
+    <echo message=" ===========================================================" />
+   
+
+    <!--Javac target version-->
+    <property name="src"                     location="${basedir}/src"/>  
+    <property name="soa.home"                location="../../.."/>  
+
+
+        
+    <fileset dir="${soa.home}/java/libs" id="soa.libs">
+        <include name="TcSoaCommon_*.jar" />
+        <include name="TcSoaClient_*.jar" />
+        <include name="TcSoaStrongModel_*.jar" />
+        <include name="TcSoaCoreStrong_*.jar" />
+        <include name="TcSoaQueryStrong_*.jar" />
+        <include name="TcSoaVendorManagementStrong_*.jar" />
+        <include name="TcSoaStrongModelVendorManagement_*.jar" />
+     </fileset>
+
+        
+    <fileset dir="${soa.home}/java/libs" id="third.party.libs">
+        <include name="commons-httpclient-contrib-3.1.jar" />
+        <include name="log4j.jar" />
+        <include name="commons-logging.jar" />
+        <include name="commons-codec.jar" />
+        <include name="teamcenter_sso_applib.jar"/>
+        <include name="teamcenter_sso_common.jar"/>
+        <include name="teamcenter_sso_webtoolkit.jar"/>
+        <include name="avalon-framework-4.1.5.jar" />
+        <include name="jacorb.jar" />
+        <include name="resolver.jar" />
+        <include name="xercesImpl.jar" />
+        <include name="xml-apis.jar" />
+        <include name="logkit-1.2.jar" />
+        <include name="fscclient.jar"/>
+        <include name="fccclient.jar"/>
+        <include name="tcserverjavabinding.jar"/>
+        <include name="tcmemjavabinding.jar"/>
+        <include name="tcgatewaystubs.jar"/>
+        <include name="httpclient-4.5.2.jar"/>
+        <include name="httpcore-4.4.4.jar"/>
+        <include name="activator.jar"/>
+        <include name="jaxb-api.jar"/>
+        <include name="jaxb-impl.jar"/>
+    </fileset>
+
+    <path id="build.classpath">
+        <fileset refid="soa.libs"  />
+    </path>
+
+    <path id="run.classpath">
+        <pathelement location="${basedir}/bin"/>
+        <fileset refid="soa.libs"  />
+        <fileset refid="third.party.libs"  />
+    </path>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${basedir}/bin"/> 
+    </target>
+
+    <target name="clean"  >
+        <delete  dir="${basedir}/bin" />   
+    </target>
+ 
+    <target name="Compile" depends="init" description="compile the source">
+        
+         <javac destdir="${basedir}/bin" debug="true" srcdir="${src}" >
+            <classpath refid="build.classpath"/>     
+         </javac>
+         <copy todir="${basedir}/bin" file="${src}/log4j.properties" />
+
+    </target>
+    
+        <target name="CreateScript" depends="Compile" >
+                
+
+        <property name="app.cp" refid="run.classpath" />
+
+                
+                <echo file="RunMe.bat" append="false" >
+@echo off
+
+if ""%1""==""-h""    goto Help
+if ""%1""==""-help"" goto Help
+if ""%1""==""?""     goto Help
+                        
+SET APP_CP=${app.cp}
+                        
+
+${java.home}\bin\java -cp %APP_CP% -Dhost=%1% com.teamcenter.vendormanagement.VendorManagementMain 
+
+goto Exit
+
+:Help
+echo Usage: RunMe [http://server:port/tc]
+echo        Will default to http://localhost:7001/tc if no argument is given.
+
+:Exit
+
+                </echo>
+                
+
+        </target>
+
+        
+        <target name="All" depends="init,Compile,CreateScript"/>
+    
+</project>

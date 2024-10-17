@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItemMasterS" status="Approved">사용자 정의 아이템 마스터 저장소</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItemMaster" status="Approved">사용자 정의 아이템 마스터</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItemRevMasterS" status="Approved">사용자 정의 아이템 리비전 마스터 저장소</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItemRevisionMaster" status="Approved">사용자 정의 아이템 리비전 마스터</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItemRevision" status="Approved">사용자 정의 아이템 리비전</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2CustomItem" status="Approved">사용자 정의 아이템</key>
+   <key locale="ko_KR" id="BusinessObject{::}A2SpecificationsBO" status="Approved">사양 BO</key>
+   <key locale="ko_KR" id="Property{::}A2CustomItem{::}a2SpecProp" status="Approved">사양</key>
+   <key locale="ko_KR" id="Property{::}A2SpecificationsBO{::}a2Color" status="Approved">색상</key>
+   <key locale="ko_KR" id="Property{::}A2SpecificationsBO{::}a2Model" status="Approved">모델</key>
+   <key locale="ko_KR" id="Property{::}A2SpecificationsBO{::}a2Year" status="Approved">년</key>
+</Add>
+</TcBusinessDataLocalization>

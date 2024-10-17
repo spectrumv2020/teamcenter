@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+    Document   : feature_sampleruntimebo.xml
+    Description: This XML is used by TEM to install or upgrade the "sampleruntimebo" solution.
+--><feature>
+    <name value="sampleruntimebo"/>
+    <property name="feature_name" value="sampleruntimebo"/>
+    <group value="package"/>
+    <guid value="304A708049C037E0A515F7BE267EC7BD"/>
+    <bundle value="${feature_name}Bundle.xml"/>
+    <description value="${feature_name}.description"/>
+    <include file="dataModelDependency.xml"/>
+    <relation/>
+    <feature>
+        <!--  Feature: Data Model -->
+        <name value="Data Model"/>
+        <property name="feature_id" value="datamodel"/>
+        <property name="bmide_optional" value="false"/>
+        <property name="template_name" value="${feature_name}"/>
+        <property name="template_file" value="${template_name}_template.xml"/>
+        <root value="true"/>
+        <bundle value="${template_name}Bundle.xml"/>
+        <description value="${template_name}.description"/>
+        <guid value="5F9F2273FF8609281C8CF6DF79FFDF88"/>
+        <include file="coreDataModel.xml"/>
+        <include file="generatePlmxmlSchema.xml"/>
+    </feature>
+</feature>

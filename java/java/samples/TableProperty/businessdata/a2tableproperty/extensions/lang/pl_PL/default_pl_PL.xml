@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItemMasterS" status="Approved">Miejsce przechowywania głównego formularza obiektu niestandardowego</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItemMaster" status="Approved">Główny formularz obiektu niestandardowego</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItemRevMasterS" status="Approved">Miejsce przechowywania głównego formularza rewizji obiektu niestandardowego</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItemRevisionMaster" status="Approved">Główny formularz rewizji obiektu niestandardowego</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItemRevision" status="Approved">Rewizja obiektu niestandardowego</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2CustomItem" status="Approved">Obiekt niestandardowy</key>
+   <key locale="pl_PL" id="BusinessObject{::}A2SpecificationsBO" status="Approved">Specyfikacje BO</key>
+   <key locale="pl_PL" id="Property{::}A2CustomItem{::}a2SpecProp" status="Approved">Specyfikacje</key>
+   <key locale="pl_PL" id="Property{::}A2SpecificationsBO{::}a2Color" status="Approved">Kolor</key>
+   <key locale="pl_PL" id="Property{::}A2SpecificationsBO{::}a2Model" status="Approved">Model</key>
+   <key locale="pl_PL" id="Property{::}A2SpecificationsBO{::}a2Year" status="Approved">Rok</key>
+</Add>
+</TcBusinessDataLocalization>

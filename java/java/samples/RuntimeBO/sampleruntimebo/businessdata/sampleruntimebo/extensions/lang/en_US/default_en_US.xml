@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="en_US" id="BusinessObject{::}SRB9runtimebo1" status="Approved">Custom Runtime Business Object</key>
+   <key locale="en_US" id="Property{::}SRB9runtimebo1{::}srb9IntegerProperty" status="Approved">Custom Integer Property</key>
+   <key locale="en_US" id="Property{::}SRB9runtimebo1{::}srb9StringProp" status="Approved">Custom String Property</key>
+</Add>
+</TcBusinessDataLocalization>

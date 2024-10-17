@@ -1,0 +1,167 @@
+<project name="SOA Sample SOAP Client" default="All" basedir=".">
+  <description>
+     Build file to build SOA Tests.
+  </description>
+    
+    <echo message=" ===========================================================" />
+    <echo message=" ============ SOA Hello Teamcenter (WSDL/SOAP) =============" />
+    <echo message=" ===========================================================" />
+   
+
+    <!--Javac target version-->
+    <property name="src"                     location="${basedir}/src"/>  
+    <property name="axis.out"                 location="${basedir}/AxisGenCode"/>  
+  
+    <property environment="env"/>
+
+
+    <property name="soa.home"                location="../../.."/>  
+
+
+    <condition property="is.windows">
+        <os family="windows"/>
+    </condition>
+    
+    <condition property="is.unix"> 
+        <os family="unix"/>
+    </condition>
+        
+    <fileset dir="${env.AXIS2_HOME}/lib" id="axis.tools.libs">
+        <include name="*.jar" />
+    </fileset>
+    
+    <path id="tool.classpath">
+        <fileset refid="axis.tools.libs"  />
+    </path>
+ 
+    <path id="build.classpath">
+        <fileset dir="${env.AXIS2_HOME}/lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <path id="run.classpath">
+        <pathelement location="${basedir}/bin"/>
+        <fileset dir="${env.AXIS2_HOME}/lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <target name="init">
+        <tstamp/>
+        <delete dir="${axis.out}"/>
+
+
+        <mkdir dir="${basedir}/bin"/> 
+        <mkdir dir="${axis.out}"/> 
+
+    </target>
+
+    <target name="clean"  >
+        <delete  dir="${basedir}/bin" />   
+    </target>
+ 
+    
+    <target name="AutoGen" depends="init" description="Generate Axis stubs from WSDLs" >
+
+
+        <taskdef name="codegen"
+                 classname="org.apache.axis2.tool.ant.AntCodegenTask" >
+            <classpath path="${axis.src}"/>
+            <classpath refid="tool.classpath"/>
+        </taskdef>
+        
+        
+        <!-- Create client stubs for the services used by this application -->
+        <codegen wsdlfilename="${soa.home}/wsdls/Core0603SessionService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Core0706SessionService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Core0603DataManagementService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Core0701DataManagementService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Core0706DataManagementService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Query0603SavedQueryService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <codegen wsdlfilename="${soa.home}/wsdls/Query0706SavedQueryService.wsdl"
+                output="${axis.out}" serverSide="false" unpackClasses="true" />
+        <!-- 
+        Axis is creating a second XSD binding (ServiceData_typ0.java) for the ServiceData element.
+        I believe this is becuase ServiceData is return as a root element from some service operation
+        and as a referenced element in other service operation returns. In any case delete
+        the extra Java file and do a string search and replace in all the other generated files.
+        The Service operations work fine with either of the ServiceData(_type0) class files, but the
+        application works better as a whole with a single definition for this class.
+        -->
+        <delete file="${axis.out}/src/com/teamcenter/schemas/soa/_2006_03/base/ServiceData_type0.java" />
+        <replace dir="${axis.out}/src" token="ServiceData_type0" value="ServiceData"/>
+        
+    </target>
+    
+    
+    <target name="Compile" depends="init,AutoGen" description="compile the source">
+        
+        <javac destdir="${basedir}/bin" debug="true"  >
+            <classpath refid="build.classpath" /> 
+            <src path="${src}"/>
+            <src path="${axis.out}"/>
+        </javac>
+        <copy todir="${basedir}/bin" file="${src}/log4j.properties" />
+        <copy todir="${basedir}/bin" file="${src}/axis2.xml" />
+
+    </target>
+    
+    <target name="CreateWindowsScript" depends="Compile" if="is.windows">             
+
+        <property name="app.cp" refid="run.classpath" />
+        
+        <echo file="RunMe.bat" append="false" >
+            @echo off
+        
+            if ""%1""==""-h""    goto Help
+            if ""%1""==""-help"" goto Help
+            if ""%1""==""?""     goto Help
+                                    
+            SET APP_CP=${app.cp}
+                                    
+        
+            "${java.home}\bin\java" -cp %APP_CP% -Dhost=%1% com.teamcenter.hello.Hello 
+        
+            goto Exit
+        
+            :Help
+            echo Usage: RunMe [http://server:port/tc]
+            echo        Will default to http://localhost:7001/tc if no argument is given.
+        
+            :Exit
+
+        </echo>
+    </target>
+        
+    <target name="CreateUnixScript" depends="Compile" if="is.unix">
+                        
+        <property name="app.cp" refid="run.classpath" />
+
+                        
+        <echo file="RunMe.sh" append="false" >
+         
+            if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "?" ]|| [ $# -ne 1 ] 
+            then
+                echo "Usage: ./RunMe.sh [http://server:port/tc]"
+                echo "Will default to http://localhost:7001/tc if no argument is given."
+            else
+                                
+                export APP_CP=${app.cp}
+                "${java.home}/bin/java" -cp $APP_CP -Dhost=$1 com.teamcenter.hello.Hello 
+            fi
+        
+        </echo>
+        <chmod file="RunMe.sh" perm="ugo+rx"/>
+    </target>
+
+            
+    <target name="All" depends="init,Compile,CreateWindowsScript,CreateUnixScript"/>
+    
+</project>

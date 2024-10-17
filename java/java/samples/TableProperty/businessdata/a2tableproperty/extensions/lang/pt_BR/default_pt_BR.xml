@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessDataLocalization xmlns="http://teamcenter.com/BusinessModel/TcBusinessDataLocalization"
+    Date="">
+<Add>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItemMasterS" status="Approved">Armazenamento mestre de item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItemMaster" status="Approved">Mestre de item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItemRevMasterS" status="Approved">Armazenamento mestre de revisão de item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItemRevisionMaster" status="Approved">Mestre de revisão de item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItemRevision" status="Approved">Revisão de item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2CustomItem" status="Approved">Item personalizado</key>
+   <key locale="pt_BR" id="BusinessObject{::}A2SpecificationsBO" status="Approved">BO de especificações</key>
+   <key locale="pt_BR" id="Property{::}A2CustomItem{::}a2SpecProp" status="Approved">Especificações</key>
+   <key locale="pt_BR" id="Property{::}A2SpecificationsBO{::}a2Color" status="Approved">Cor</key>
+   <key locale="pt_BR" id="Property{::}A2SpecificationsBO{::}a2Model" status="Approved">Modelo</key>
+   <key locale="pt_BR" id="Property{::}A2SpecificationsBO{::}a2Year" status="Approved">Ano</key>
+</Add>
+</TcBusinessDataLocalization>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+    Document   : feature_a2tableproperty.xml
+    Description: This XML is used by TEM to install or upgrade the "a2tableproperty" solution.
+--><feature>
+    <name value="Table Property Template"/>
+    <property name="feature_name" value="a2tableproperty"/>
+    <group value="package"/>
+    <guid value="B88DFD05EE51D8FC0BA7D47C76AF00D5"/>
+    <bundle value="${feature_name}Bundle.xml"/>
+    <description value="${feature_name}.description"/>
+    <include file="dataModelDependency.xml"/>
+    <relation/>
+    <feature>
+        <!--  Feature: Data Model -->
+        <name value="Data Model"/>
+        <property name="feature_id" value="datamodel"/>
+        <property name="bmide_optional" value="false"/>
+        <property name="template_name" value="${feature_name}"/>
+        <property name="template_file" value="${template_name}_template.xml"/>
+        
+        <root value="true"/>
+        <bundle value="${template_name}Bundle.xml"/>
+        <description value="${template_name}.description"/>
+        <guid value="11CC8D0AEC1F57ADC9DE6583E73EC7AD"/>
+        <include file="coreDataModel.xml"/>
+        <include file="generatePlmxmlSchema.xml"/>
+    </feature>
+<dependencyReferences>
+        <reference name="foundation" value="8C061DD51E13E0CB9DC4687B1A3348BE"/>
+    </dependencyReferences>
+</feature>

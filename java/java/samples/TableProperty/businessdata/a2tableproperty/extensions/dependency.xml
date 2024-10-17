@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+@<COPYRIGHT>@
+==================================================
+Copyright 2014.
+Siemens Product Lifecycle Management Software Inc.
+All Rights Reserved.
+==================================================
+@<COPYRIGHT>@
+--><TcBusinessDataIncludes currentTemplateVersion="11.2_4" displayName="Table Property Template" enableOpsDataDeploy="true" guid="11CC8D0AEC1F57ADC9DE6583E73EC7AD" isDescriptionMandatory="false" name="a2tableproperty" optional="true" prefixes="A2" teamcenterTemplate="false">
+    <include file="foundation_template.xml"/>
+</TcBusinessDataIncludes>

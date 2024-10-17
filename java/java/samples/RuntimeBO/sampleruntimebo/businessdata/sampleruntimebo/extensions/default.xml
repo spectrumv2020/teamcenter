@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessData xmlns="http://teamcenter.com/BusinessModel/TcBusinessData" Date="">
+<Add>
+   <Library name="SRB9sampleruntimebo" createRelease="tc11000.1.0" serviceLibrary="false"
+       namespace="" isThirdParty="false">
+     <DependentOn name="metaframework"/>
+     <DependentOn name="tccore"/>
+     <DependentOn name="tc"/>
+     <DependentOn name="cxpom"/>
+   </Library>
+   <OperationInputType typeName="SRB9runtimebo1CreI" parentTypeName="RuntimeBusinessObjectCreI"
+       typeClassName="SRB9runtimebo1CreI" description="CreateInput object for &quot;SRB9runtimebo1&quot; business object"
+       isAbstract="false" artifactName="SRB9runtimebo1CreI">
+     <OperationInputProperty propName="srb9StringProp" compoundObjectConstant="" srcPropName=""
+         compoundObjectType="" fieldType="SimpleProperty" description="A required string input property"/>
+   </OperationInputType>
+   <OperationInputType typeName="SRB9runtimebo1SvAI" parentTypeName="RuntimeBusinessObjectSvAI"
+       typeClassName="SRB9runtimebo1SvAI" description="SaveAsInput object for &quot;SRB9runtimebo1&quot; business object"
+       isAbstract="false" artifactName="SRB9runtimebo1SvAI"/>
+   <TcRuntimeType typeName="SRB9runtimebo1" parentTypeName="RuntimeBusinessObject"
+       typeClassName="SRB9runtimebo1" description="SRB9runtimebo1 provides an example of a custom runtime object with custom runtime properties and operations. Instances of this object can be created using the published Teamcenter interfaces.  The template and a sample application are provided in Teamcenter samples."
+       isAbstract="false" artifactName="SRB9runtimebo1" functionality="SRB9SampleRuntimeBO">
+     <TcProperty propName="srb9StringProp" propTypeName="Runtime" propValueType="PROP_string"
+         propMaxStringLength="128" isArray="false" arrayLength="0" description="A custom runtime string property. Also contains a getter and setter operation to demonstrate how code can be generated for properties on custom runtime business objects."
+         referencedTypeConstant="" referencedType=""/>
+     <TcProperty propName="srb9IntegerProperty" propTypeName="Runtime" propValueType="PROP_int"
+         propMaxStringLength="0" isArray="false" arrayLength="0" description="A custom runtime integer property. Also contains a getter and setter operation to demonstrate how code can be generated for properties on custom runtime business objects."
+         referencedTypeConstant="" referencedType=""/>
+   </TcRuntimeType>
+   <BusinessObjectInterface name="SRB9runtimebo1" namespace="sampleruntimebo" libraryName="SRB9sampleruntimebo"
+       createRelease="tc11000.1.0" typeName="SRB9runtimebo1" primaryInterface="true"
+       description="Interface Name for Business Object SRB9runtimebo1"/>
+   <PropertyOperation id="getSrb9IntegerProperty#int,&amp;$bool,&amp;" name="getSrb9IntegerProperty"
+       createRelease="tc11000.1.0" description="Getter for an Integer Property" propertyName="srb9IntegerProperty"
+       operationType="Getter" opTemplate="int#get#int,&amp;$bool,&amp;" interface="sampleruntimebo::SRB9runtimebo1"
+       isPublished="true" canOverride="true" isPreActionAllowed="false" isPostActionAllowed="false"
+       isPreConditionAllowed="false" returnDescription="Status. 0 if successful"/>
+   <PropertyOperation id="getSrb9StringProp#std::string,&amp;$bool,&amp;" name="getSrb9StringProp"
+       createRelease="tc11000.1.0" description="Getter for a string Property" propertyName="srb9StringProp"
+       operationType="Getter" opTemplate="int#get#std::string,&amp;$bool,&amp;" interface="sampleruntimebo::SRB9runtimebo1"
+       isPublished="true" canOverride="true" isPreActionAllowed="false" isPostActionAllowed="false"
+       isPreConditionAllowed="false" returnDescription="Status. 0 if successful"/>
+   <PropertyOperation id="setSrb9IntegerProperty#int$bool" name="setSrb9IntegerProperty"
+       createRelease="tc11000.1.0" description="Setter for an Integer Property" propertyName="srb9IntegerProperty"
+       operationType="Setter" opTemplate="int#set#int$bool" interface="sampleruntimebo::SRB9runtimebo1"
+       isPublished="true" canOverride="true" isPreActionAllowed="false" isPostActionAllowed="false"
+       isPreConditionAllowed="false" returnDescription="Status. 0 if successful"/>
+   <PropertyOperation id="setSrb9StringProp#const,std::string,&amp;$bool" name="setSrb9StringProp"
+       createRelease="tc11000.1.0" description="Setter for a string Property" propertyName="srb9StringProp"
+       operationType="Setter" opTemplate="int#set#const,std::string,&amp;$bool" interface="sampleruntimebo::SRB9runtimebo1"
+       isPublished="true" canOverride="true" isPreActionAllowed="false" isPostActionAllowed="false"
+       isPreConditionAllowed="false" returnDescription="Status. 0 if successful"/>
+   <OperationAttach typeName="SRB9runtimebo1" id="setPropertiesFromCreateInput#Teamcenter::CreateInput,*"/>
+   <TcGlobalConstantAttach constantName="Fnd0SelectedLocales" value="en_US"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="SRB9runtimebo1" value="SRB9runtimebo1CreI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="SRB9runtimebo1" value="SRB9runtimebo1SvAI"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="SRB9runtimebo1" propertyName="srb9IntegerProperty"
+       value="true"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="SRB9runtimebo1" propertyName="srb9StringProp"
+       value="true"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="SRB9runtimebo1" propertyName="srb9IntegerProperty"
+       value="Write"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="SRB9runtimebo1" propertyName="srb9StringProp"
+       value="Write"/>
+   <TcPropertyConstantAttach constantName="Required" typeName="SRB9runtimebo1" propertyName="srb9StringProp"
+       value="true"/>
+   <Functionality name="SRB9SampleRuntimeBO" displayName="Sample Runtime BO" enabledForVerificationRules="false"
+       description="This component represents all business objects in the sample runtime template. The template was created to be an example of how users can create properties and operations on custom runtime business objects."/>
+</Add>
+</TcBusinessData>

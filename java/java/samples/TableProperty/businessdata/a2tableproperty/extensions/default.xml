@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TcBusinessData xmlns="http://teamcenter.com/BusinessModel/TcBusinessData" Date="">
+<Add>
+   <TcClass className="A2CustomItem" parentClassName="Item" isExportable="false" isUninstantiable="false"
+       isUninheritable="false" description=""/>
+   <TcClass className="A2CustomItemMasterS" parentClassName="ItemMaster" isExportable="false"
+       isUninstantiable="false" isUninheritable="false" description=""/>
+   <TcClass className="A2CustomItemRevMasterS" parentClassName="ItemVersionMaster"
+       isExportable="false" isUninstantiable="false" isUninheritable="false" description=""/>
+   <TcClass className="A2CustomItemRevision" parentClassName="ItemRevision" isExportable="false"
+       isUninstantiable="false" isUninheritable="false" description=""/>
+   <TcClass className="A2SpecificationsBO" parentClassName="Fnd0TableRow" isExportable="false"
+       isUninstantiable="false" isUninheritable="false" revisabilityOption="Revisable"
+       description="">
+     <TcAttribute attributeName="a2Color" description="" attributeType="POM_string"
+         maxStringLength="128" isArray="false" followOnExport="false" isNullsAllowed="true"
+         isUnique="false" isPublicRead="true" isPublicWrite="true" isCandidateKey="false"
+         isTransient="false" exportAsString="false" noBackpointer="false" lowerBoundValue=""
+         upperBoundValue=""/>
+     <TcAttribute attributeName="a2Model" description="" attributeType="POM_string"
+         maxStringLength="128" isArray="false" followOnExport="false" isNullsAllowed="true"
+         isUnique="false" isPublicRead="true" isPublicWrite="true" isCandidateKey="false"
+         isTransient="false" exportAsString="false" noBackpointer="false" lowerBoundValue=""
+         upperBoundValue=""/>
+     <TcAttribute attributeName="a2Year" description="" attributeType="POM_string"
+         maxStringLength="128" isArray="false" followOnExport="false" isNullsAllowed="true"
+         isUnique="false" isPublicRead="true" isPublicWrite="true" isCandidateKey="false"
+         isTransient="false" exportAsString="false" noBackpointer="false" lowerBoundValue=""
+         upperBoundValue=""/>
+   </TcClass>
+   <OperationInputType typeName="A2CustomItemCreI" parentTypeName="ItemCreI" typeClassName="A2CustomItemCreI"
+       description="CreateInput object for &quot;A2CustomItem&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemCreI"/>
+   <OperationInputType typeName="A2CustomItemMasterCreI" parentTypeName="Item MasterCreI"
+       typeClassName="A2CustomItemMasterCreI" description="CreateInput object for &quot;A2CustomItemMaster&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemMasterCreI"/>
+   <OperationInputType typeName="A2CustomItemMasterSCreI" parentTypeName="ItemMasterCreI"
+       typeClassName="A2CustomItemMasterSCreI" description="CreateInput object for &quot;A2CustomItemMasterS&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemMasterSCreI"/>
+   <OperationInputType typeName="A2CustomItemMasterSSvAI" parentTypeName="ItemMasterSvAI"
+       typeClassName="A2CustomItemMasterSSvAI" description="SaveAsInput object for &quot;A2CustomItemMasterS&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemMasterSSvAI"/>
+   <OperationInputType typeName="A2CustomItemMasterSvAI" parentTypeName="Item MasterSvAI"
+       typeClassName="A2CustomItemMasterSvAI" description="SaveAsInput object for &quot;A2CustomItemMaster&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemMasterSvAI"/>
+   <OperationInputType typeName="A2CustomItemRevMasterSCreI" parentTypeName="ItemVersionMasterCreI"
+       typeClassName="A2CustomItemRevMasterSCreI" description="CreateInput object for &quot;A2CustomItemRevMasterS&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevMasterSCreI"/>
+   <OperationInputType typeName="A2CustomItemRevMasterSSvAI" parentTypeName="ItemVersionMasterSvAI"
+       typeClassName="A2CustomItemRevMasterSSvAI" description="SaveAsInput object for &quot;A2CustomItemRevMasterS&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevMasterSSvAI"/>
+   <OperationInputType typeName="A2CustomItemRevisionCreI" parentTypeName="ItemRevisionCreI"
+       typeClassName="A2CustomItemRevisionCreI" description="CreateInput object for &quot;A2CustomItemRevision&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevisionCreI"/>
+   <OperationInputType typeName="A2CustomItemRevisionMasterCreI" parentTypeName="ItemRevision MasterCreI"
+       typeClassName="A2CustomItemRevisionMasterCreI" description="CreateInput object for &quot;A2CustomItemRevisionMaster&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevisionMasterCreI"/>
+   <OperationInputType typeName="A2CustomItemRevisionMasterSvAI" parentTypeName="ItemRevision MasterSvAI"
+       typeClassName="A2CustomItemRevisionMasterSvAI" description="SaveAsInput object for &quot;A2CustomItemRevisionMaster&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevisionMasterSvAI"/>
+   <OperationInputType typeName="A2CustomItemRevisionRevI" parentTypeName="ItemRevisionRevI"
+       typeClassName="A2CustomItemRevisionRevI" description="ReviseInput object for &quot;A2CustomItemRevision&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevisionRevI"/>
+   <OperationInputType typeName="A2CustomItemRevisionSvAI" parentTypeName="ItemRevisionSvAI"
+       typeClassName="A2CustomItemRevisionSvAI" description="SaveAsInput object for &quot;A2CustomItemRevision&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemRevisionSvAI"/>
+   <OperationInputType typeName="A2CustomItemSvAI" parentTypeName="ItemSvAI" typeClassName="A2CustomItemSvAI"
+       description="SaveAsInput object for &quot;A2CustomItem&quot; business object"
+       isAbstract="false" artifactName="A2CustomItemSvAI"/>
+   <OperationInputType typeName="A2SpecificationsBOCreI" parentTypeName="Fnd0TableRowCreI"
+       typeClassName="A2SpecificationsBOCreI" description="CreateInput object for &quot;A2SpecificationsBO&quot; business object"
+       isAbstract="false" artifactName="A2SpecificationsBOCreI">
+     <OperationInputProperty propName="a2Color" compoundObjectConstant="" srcPropName="a2Color"
+         compoundObjectType="" fieldType="SimpleProperty" description=""/>
+     <OperationInputProperty propName="a2Model" compoundObjectConstant="" srcPropName="a2Model"
+         compoundObjectType="" fieldType="SimpleProperty" description=""/>
+     <OperationInputProperty propName="a2Year" compoundObjectConstant="" srcPropName="a2Year"
+         compoundObjectType="" fieldType="SimpleProperty" description=""/>
+   </OperationInputType>
+   <OperationInputType typeName="A2SpecificationsBOSvAI" parentTypeName="Fnd0TableRowSvAI"
+       typeClassName="A2SpecificationsBOSvAI" description="SaveAsInput object for &quot;A2SpecificationsBO&quot; business object"
+       isAbstract="false" artifactName="A2SpecificationsBOSvAI"/>
+   <TcForm typeName="A2CustomItemMaster" parentTypeName="Item Master" typeClassName="Form"
+       description="Item with Table Property" isAbstract="false" artifactName="A2CustomItemMaster"
+       formStorageClassName="A2CustomItemMasterS"/>
+   <TcForm typeName="A2CustomItemRevisionMaster" parentTypeName="ItemRevision Master"
+       typeClassName="Form" description="Item with Table Property" isAbstract="false"
+       artifactName="A2CustomItemRevisionMaster" formStorageClassName="A2CustomItemRevMasterS"/>
+   <TcStandardType typeName="A2CustomItem" parentTypeName="Item" typeClassName="A2CustomItem"
+       description="Item with Table Property" isAbstract="false" artifactName="A2CustomItem">
+     <TcProperty propName="a2SpecProp" propTypeName="Table" propValueType="PROP_typed_reference"
+         propMaxStringLength="0" isArray="true" arrayLength="-1" description="" referencedTypeConstant=""
+         referencedType="A2SpecificationsBO"/>
+   </TcStandardType>
+   <TcStandardType typeName="A2CustomItemMasterS" parentTypeName="ItemMaster" typeClassName="A2CustomItemMasterS"
+       description="Item with Table Property" isAbstract="false" artifactName="A2CustomItemMasterS"/>
+   <TcStandardType typeName="A2CustomItemRevMasterS" parentTypeName="ItemVersionMaster"
+       typeClassName="A2CustomItemRevMasterS" description="Item with Table Property"
+       isAbstract="false" artifactName="A2CustomItemRevMasterS"/>
+   <TcStandardType typeName="A2CustomItemRevision" parentTypeName="ItemRevision" typeClassName="A2CustomItemRevision"
+       description="Item with Table Property" isAbstract="false" artifactName="A2CustomItemRevision"/>
+   <TcStandardType typeName="A2SpecificationsBO" parentTypeName="Fnd0TableRow" typeClassName="A2SpecificationsBO"
+       description="" isAbstract="false" artifactName="A2SpecificationsBO"/>
+   <TcGlobalConstantAttach constantName="Fnd0SelectedLocales" value="en_US,de_DE,fr_FR,it_IT,ja_JP"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItem" value="A2CustomItemCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItemMaster"
+       value="A2CustomItemMasterCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItemMasterS"
+       value="A2CustomItemMasterSCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItemRevision"
+       value="A2CustomItemRevisionCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItemRevisionMaster"
+       value="A2CustomItemRevisionMasterCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2CustomItemRevMasterS"
+       value="A2CustomItemRevMasterSCreI"/>
+   <TcTypeConstantAttach constantName="CreateInput" typeName="A2SpecificationsBO"
+       value="A2SpecificationsBOCreI"/>
+   <TcTypeConstantAttach constantName="ItemRevision" typeName="A2CustomItem" value="A2CustomItemRevision"/>
+   <TcTypeConstantAttach constantName="MasterForm" typeName="A2CustomItem" value="A2CustomItemMaster"/>
+   <TcTypeConstantAttach constantName="MasterForm" typeName="A2CustomItemRevision"
+       value="A2CustomItemRevisionMaster"/>
+   <TcTypeConstantAttach constantName="ReviseInput" typeName="A2CustomItemRevision"
+       value="A2CustomItemRevisionRevI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItem" value="A2CustomItemSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItemMaster"
+       value="A2CustomItemMasterSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItemMasterS"
+       value="A2CustomItemMasterSSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItemRevision"
+       value="A2CustomItemRevisionSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItemRevisionMaster"
+       value="A2CustomItemRevisionMasterSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2CustomItemRevMasterS"
+       value="A2CustomItemRevMasterSSvAI"/>
+   <TcTypeConstantAttach constantName="SaveAsInput" typeName="A2SpecificationsBO"
+       value="A2SpecificationsBOSvAI"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="A2CustomItem" propertyName="a2SpecProp"
+       value="true"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="A2SpecificationsBO"
+       propertyName="a2Color" value="true"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="A2SpecificationsBO"
+       propertyName="a2Model" value="true"/>
+   <TcPropertyConstantAttach constantName="Enabled" typeName="A2SpecificationsBO"
+       propertyName="a2Year" value="true"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="A2CustomItem" propertyName="a2SpecProp"
+       value="Write"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="A2SpecificationsBO"
+       propertyName="a2Color" value="Write"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="A2SpecificationsBO"
+       propertyName="a2Model" value="Write"/>
+   <TcPropertyConstantAttach constantName="Modifiable" typeName="A2SpecificationsBO"
+       propertyName="a2Year" value="Write"/>
+   <Functionality name="A2tableproperty" displayName="Table Property Template" enabledForVerificationRules="false"
+       description="Component for the template - a2tableproperty"/>
+</Add>
+</TcBusinessData>
